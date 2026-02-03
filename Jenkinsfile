@@ -18,10 +18,10 @@ pipeline{
         string(name: 'dockerHubUsername', defaultValue: 'harishnshetty', description: 'Docker Hub Username')
         string(name: 'dockerImageName', defaultValue: 'frontend-signed', description: 'Docker Image Name')
 
-        string(name: 'gitUserConfigName', defaultValue: 'harishn', description: 'Git User Name')
-        string(name: 'gitUserConfigEmail', defaultValue: 'harishn662@gmail.com', description: 'Git User Email')
-        string(name: 'gitUserName', defaultValue: 'harishnshetty', description: 'Git User Name')
-        string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
+        // string(name: 'gitUserConfigName', defaultValue: 'harishn', description: 'Git User Name')
+        // string(name: 'gitUserConfigEmail', defaultValue: 'harishn662@gmail.com', description: 'Git User Email')
+        // string(name: 'gitUserName', defaultValue: 'harishnshetty', description: 'Git User Name')
+        // string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
         // string(name: 'gitRepo', defaultValue: '3-tier-jenkins-shared-libraries-devsecops-project', description: 'Git Repo')
         // string(name: 'gitBranch', defaultValue: 'deployment', description: 'Git Branch')
 
