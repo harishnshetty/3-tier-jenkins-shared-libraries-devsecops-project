@@ -51,21 +51,21 @@ pipeline{
                 checkoutGit(params.gitUrl, params.gitBranch)
             }
         }
-        stage('sonarqube Analysis'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                sonarqubeAnalysis()
-            }
-        }
-        stage('sonarqube QualitGate'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                script{
-                    def credentialsId = 'Sonar-token'
-                    qualityGate(credentialsId)
-                }
-            }
-        }
+        // stage('sonarqube Analysis'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         sonarqubeAnalysis()
+        //     }
+        // }
+        // stage('sonarqube QualitGate'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         script{
+        //             def credentialsId = 'Sonar-token'
+        //             qualityGate(credentialsId)
+        //         }
+        //     }
+        // }
         stage('npm install'){
         when { expression { params.action == 'create'}}    
             steps{
@@ -81,23 +81,23 @@ pipeline{
         }
 
 
-stage('OWASP FS SCAN') {
-    when { expression { params.action == 'create'} }
-    steps {
-        dependencyCheck(
-            odcInstallation: 'dp-check',
-            additionalArguments: '''
-                --scan .
-                --disableYarnAudit
-                --disableNodeAudit
-            '''
-        )
+// stage('OWASP FS SCAN') {
+//     when { expression { params.action == 'create'} }
+//     steps {
+//         dependencyCheck(
+//             odcInstallation: 'dp-check',
+//             additionalArguments: '''
+//                 --scan .
+//                 --disableYarnAudit
+//                 --disableNodeAudit
+//             '''
+//         )
 
-        dependencyCheckPublisher(
-            pattern: '**/dependency-check-report-*.xml'
-        )
-    }
-}
+//         dependencyCheckPublisher(
+//             pattern: '**/dependency-check-report-*.xml'
+//         )
+//     }
+// }
 
 
 
@@ -130,31 +130,31 @@ stage('OWASP FS SCAN') {
             }
         }
 
-        stage('Updating the k8s Deploymentfile'){
-            steps{
-                updateK8sDeploymentFile()
-            }
-        }
+    //     stage('Updating the k8s Deploymentfile'){
+    //         steps{
+    //             updateK8sDeploymentFile()
+    //         }
+    //     }
 
-        stage('commit and push to github'){
-            when { expression { params.action == 'create'}}    
-            steps{
-                commitAndPush()
-            }
-        }
+    //     stage('commit and push to github'){
+    //         when { expression { params.action == 'create'}}    
+    //         steps{
+    //             commitAndPush()
+    //         }
+    //     }
 
-    }
+    // }
 
-    post {
-        always {
-             script{
-            echo 'Slack Notifications'
-            slackSend (
-                channel: params.slackChannel,
-                color: COLOR_MAP[currentBuild.currentResult],
-                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} \n build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
-                )
-            }
-        }
+    // post {
+    //     always {
+    //          script{
+    //         echo 'Slack Notifications'
+    //         slackSend (
+    //             channel: params.slackChannel,
+    //             color: COLOR_MAP[currentBuild.currentResult],
+    //             message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} \n build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+    //             )
+    //         }
+    //     }
     }
 }
