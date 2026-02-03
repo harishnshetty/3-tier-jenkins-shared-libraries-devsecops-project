@@ -72,12 +72,12 @@ pipeline{
         //         }
         //     }
         // }
-        stage('npm install'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                npmInstall()
-            }
-        }
+        // stage('npm install'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         npmInstall()
+        //     }
+        // }
         
         stage('Trivy file scan'){
         when { expression { params.action == 'create'}}    
@@ -129,12 +129,12 @@ pipeline{
         //     }
         // }
 
-        stage('Docker Run Container'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                dockerRun()
-            }
-        }
+        // stage('Docker Run Container'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         dockerRun()
+        //     }
+        // }
 
     //     stage('Updating the k8s Deploymentfile'){
     //         steps{
