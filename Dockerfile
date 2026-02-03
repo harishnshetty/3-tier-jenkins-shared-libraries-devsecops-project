@@ -1,20 +1,11 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+EXPOSE 4000
+CMD ["node", "index.js"]
 
-FROM nginx:alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf *
-COPY --from=builder /app/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# docker build --no-cache -t harishnshetty/amazon-backend:latest .
 
-# docker build --no-cache -t harishnshetty/amazon-frontend:latest .
-
-# docker run -d -p 8080:80 harishnshetty/amazon-frontend:latest
-
-# docker push harishnshetty/amazon-frontend:latest
+# docker run -d -p 4000:4000 harishnshetty/amazon-backend:latest
