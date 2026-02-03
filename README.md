@@ -19,6 +19,10 @@ trivy repo --severity CRITICAL --skip-files "*.md" .
 trivy repo --severity HIGH https://github.com/Plazmaz/leaky-repo.git
 
 
+
+https://trivy.dev/docs/latest/supply-chain/sbom/
+
+https://cyclonedx.github.io/Sunshine/
 $ trivy image --format spdx-json --output result.json alpine:3.15
 
 $ trivy fs --format cyclonedx --output result.json /app/myproject
