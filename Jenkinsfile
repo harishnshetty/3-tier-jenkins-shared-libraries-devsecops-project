@@ -79,12 +79,12 @@ pipeline{
         //     }
         // }
         
-        stage('Trivy file scan'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                trivyFs()
-            }
-        }
+        // stage('Trivy file scan'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         trivyFs()
+        //     }
+        // }
 
 
 // stage('OWASP FS SCAN') {
