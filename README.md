@@ -1,6 +1,6 @@
 # 3-tier-jenkins-shared-libraries-devsecops-project
 
-## Application Tier
+## Database Tier
 
-### Backend
+### mysql:5.7
 
