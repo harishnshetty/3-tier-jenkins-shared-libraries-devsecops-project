@@ -5,9 +5,9 @@ RUN npm ci --only=production \
     && npm cache clean --force
 COPY . .
 
-RUN adduser -m nodejs
-RUN chown -R nodejs /app
-USER nodejs
+RUN adduser -m appuser
+RUN chown -R appuser /app
+USER appuser
 
 EXPOSE 4000
 CMD ["node", "index.js"]
