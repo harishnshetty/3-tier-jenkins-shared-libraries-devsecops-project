@@ -51,6 +51,12 @@ pipeline{
                 checkoutGit(params.gitUrl, params.gitBranch)
             }
         }
+        stage('gitleak'){
+            when { expression { params.action == 'create'}}    
+            steps{
+                gitleak()
+            }
+        }
         // stage('sonarqube Analysis'){
         // when { expression { params.action == 'create'}}    
         //     steps{
