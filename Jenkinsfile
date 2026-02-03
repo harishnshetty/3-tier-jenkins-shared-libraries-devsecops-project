@@ -72,12 +72,12 @@ pipeline{
         //         }
         //     }
         // }
-        // stage('npm install'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         npmInstall()
-        //     }
-        // }
+        stage('npm install'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                npmInstall()
+            }
+        }
         
         stage('Trivy file scan'){
         when { expression { params.action == 'create'}}    
