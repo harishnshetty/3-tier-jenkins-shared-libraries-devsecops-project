@@ -47,14 +47,30 @@ docker image ls --digests
 
 cosign sign --key cosign.key docker.io/harishnshetty/forntend-signed:@sha
 
+
+
 trivy image --ignore-unfixed --format cosign-vuln --output vuln.json docker.io/harishnshetty/forntend-signed:@sha
+
 
 cosign attest --key cosign.key --type vuln --predicate vuln.json docker.io/harishnshetty/forntend-signed:@sha
 
 cosign verify-attestation --key cosign.pub --type vuln harishnshetty/forntend-signed:@sha
 
+
+
+
+
 cosign sign --key cosign.key harishnshetty/test-signed:latest
 cosign verify --key cosign.pub harishnshetty/test-signed
+
+
+cosign verify-attestation \
+  --key cosign.pub \
+  --type cyclonedx \
+  $IMAGE
+
+
+
 
 https://kyverno.io/docs/installation/installation/
 

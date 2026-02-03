@@ -142,6 +142,12 @@ pipeline{
     //         }
     //     }
 
+        stage('SBOM and Cosign Attestation'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                trivyCosignEnforce()
+            }
+        }
     //     stage('commit and push to github'){
     //         when { expression { params.action == 'create'}}    
     //         steps{
