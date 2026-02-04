@@ -189,6 +189,12 @@ pipeline{
             }
         }
 
+        stage('show memory'){
+            steps{
+                sh 'free -h'
+            }
+        }
+
     // post {
     //     always {
     //          script{
@@ -200,13 +206,6 @@ pipeline{
     //             )
     //         }
     //     }
-
-            stage('gitleak'){
-            when { expression { params.action == 'create'}}    
-            steps{
-                gitleak()
-            }
-        }
-        
+    
     }
 }
