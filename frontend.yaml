@@ -12,6 +12,15 @@ spec:
       labels:
         app: frontend
     spec:
+      securityContext:
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - ALL
       containers:
         - name: frontend
           image: harishnshetty/frontend-signed:1
@@ -24,6 +33,14 @@ spec:
               cpu: "128m"
           ports:
             - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: frontend-configmap
 
 ---
 apiVersion: v1
