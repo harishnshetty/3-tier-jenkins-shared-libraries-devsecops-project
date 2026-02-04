@@ -129,12 +129,7 @@ pipeline{
             }
         }
 
-        stage('Docker Run Container'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                dockerRun()
-            }
-        }
+
 
     //     stage('Updating the k8s Deploymentfile'){
     //         steps{
@@ -156,6 +151,19 @@ pipeline{
     //     }
 
     // }
+        stage('Manual Approval'){
+            steps{
+                timeout(time: 10, unit: 'MINUTES') {
+                    input message: 'Approve to run the container'
+                }
+            }
+        }
+        stage('Docker Run Container'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                dockerRun()
+            }
+        }
 
     // post {
     //     always {
