@@ -145,16 +145,7 @@ pipeline{
             stage('SBOM and Cosign Attestation'){
                 when { expression { params.action == 'create'}}    
                 steps{
-                    script {
-                        // Build the same image name used in dockerBuild/dockerPush stages
-                        def tag = env.BUILD_ID ?: "latest"
-                        def imageName = "${params.dockerHubUsername}/${params.dockerImageName}:${tag}"
-                        
-                        // Or if you want to use the same tag as your dockerPush stage
-                        // Check how dockerPush constructs the image name
-                        
-                        trivyCosignEnforce(image: imageName)
-                    }
+                    trivyCosignEnforce()
                 }
             }
     //     stage('commit and push to github'){
