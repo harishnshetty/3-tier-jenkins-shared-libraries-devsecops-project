@@ -4,7 +4,7 @@
 
 ### mysql:9.6
 
-Build → SAST → SCA → Image Build → Trivy → Push → Cosign Sign → Deploy
+   Build → SAST → SCA → Image Build → Trivy → Push → Cosign Sign → Deploy
 
 
 sudo apt install gitleaks
