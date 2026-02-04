@@ -122,19 +122,19 @@ pipeline{
             }
         }
 
-        // stage('Docker Push To DockerHub'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         dockerPush()
-        //     }
-        // }
+        stage('Docker Push To DockerHub'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                dockerPush()
+            }
+        }
 
-        // stage('Docker Run Container'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         dockerRun()
-        //     }
-        // }
+        stage('Docker Run Container'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                dockerRun()
+            }
+        }
 
     //     stage('Updating the k8s Deploymentfile'){
     //         steps{
