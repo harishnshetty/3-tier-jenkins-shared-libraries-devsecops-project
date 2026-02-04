@@ -151,16 +151,40 @@ pipeline{
     //     }
 
     // }
-        stage('Manual Approval'){
-            steps{
-                timeout(time: 10, unit: 'MINUTES') {
-                    input message: 'Approve to run the container'
+        stage('Manual Approval') {
+            steps {
+                script {
+                    try {
+                        timeout(time: 10, unit: 'MINUTES') {
+                            input message: 'Approve to run the container'
+                        }
+                        env.APPROVED = "true"
+                    } catch (err) {
+                        echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
+                        env.APPROVED = "false"
+                    }
                 }
             }
         }
-        stage('Docker Run Container'){
-        when { expression { params.action == 'create'}}    
-            steps{
+
+
+
+        // stage('Docker Run Container'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         dockerRun()
+        //     }
+        // }
+
+
+        stage('Docker Run Container') {
+            when {
+                allOf {
+                    expression { env.APPROVED == "true" }
+                    expression { params.action == 'create' }
+                }
+            }
+            steps {
                 dockerRun()
             }
         }
