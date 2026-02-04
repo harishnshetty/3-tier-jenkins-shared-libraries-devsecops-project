@@ -18,12 +18,10 @@ pipeline{
         string(name: 'dockerHubUsername', defaultValue: 'harishnshetty', description: 'Docker Hub Username')
         string(name: 'dockerImageName', defaultValue: 'frontend-signed', description: 'Docker Image Name')
 
-         // string(name: 'gitUserConfigName', defaultValue: 'harishn', description: 'Git User Name')
-        // string(name: 'gitUserConfigEmail', defaultValue: 'harishn662@gmail.com', description: 'Git User Email')
-        // string(name: 'gitUserName', defaultValue: 'harishnshetty', description: 'Git User Name')
-        // string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
-        // string(name: 'gitRepo', defaultValue: '3-tier-jenkins-shared-libraries-devsecops-project', description: 'Git Repo')
-        // string(name: 'gitBranch', defaultValue: 'deployment', description: 'Git Branch')
+        string(name: 'gitUserConfigName', defaultValue: 'harishn', description: 'Git User Name')
+        string(name: 'gitUserConfigEmail', defaultValue: 'harishn662@gmail.com', description: 'Git User Email')
+        string(name: 'gitUserName', defaultValue: 'harishnshetty', description: 'Git User Name')
+        string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
 
         string(name: 'slackChannel', defaultValue: '#devosecops_channel', description: 'Slack Channel')
     }
@@ -36,6 +34,8 @@ pipeline{
         SCANNER_HOME = tool 'sonar-scanner'
         CONTAINER_PORT = 80
         EXPOSE_PORT = 80
+        MANIFESTFILENAME = 'frontend.yaml'
+        BRANCH = 'frontend'
     }
     stages{
 
@@ -202,6 +202,20 @@ pipeline{
         //         dockerRun()
         //     }
         // }
+
+
+
+        stage('update k8s deployment frontend file') {
+            when {
+                allOf {
+                    expression { env.APPROVED == "true" }
+                    expression { params.action == 'create' }
+                }
+            }
+            steps {
+                updateK8sDeploymentFile()
+            }
+        }
 
         stage('show memory'){
             steps{
