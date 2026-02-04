@@ -151,12 +151,28 @@ pipeline{
     //     }
 
     // }
+        // stage('Manual Approval') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 timeout(time: 10, unit: 'MINUTES') {
+        //                     input message: 'Approve to run the container'
+        //                 }
+        //                 env.APPROVED = "true"
+        //             } catch (err) {
+        //                 echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
+        //                 env.APPROVED = "false"
+        //             }
+        //         }
+        //     }
+        // }
+
         stage('Manual Approval') {
             steps {
                 script {
                     try {
                         timeout(time: 10, unit: 'MINUTES') {
-                            input message: 'Approve to run the container'
+                            input message: 'Approve to update the k8s deployment frontend file'
                         }
                         env.APPROVED = "true"
                     } catch (err) {
@@ -167,8 +183,6 @@ pipeline{
             }
         }
 
-
-
         // stage('Docker Run Container'){
         // when { expression { params.action == 'create'}}    
         //     steps{
@@ -177,17 +191,17 @@ pipeline{
         // }
 
 
-        stage('Docker Run Container') {
-            when {
-                allOf {
-                    expression { env.APPROVED == "true" }
-                    expression { params.action == 'create' }
-                }
-            }
-            steps {
-                dockerRun()
-            }
-        }
+        // stage('Docker Run Container') {
+        //     when {
+        //         allOf {
+        //             expression { env.APPROVED == "true" }
+        //             expression { params.action == 'create' }
+        //         }
+        //     }
+        //     steps {
+        //         dockerRun()
+        //     }
+        // }
 
         stage('show memory'){
             steps{
