@@ -58,7 +58,11 @@ cosign verify-attestation --key cosign.pub --type vuln harishnshetty/forntend-si
 
 
 
+```bash
+cosign verify --key cosign.pub harishnshetty/frontend-signed@sha256:e595d540b9ff758118c497f37d72b2892c55a6b8d5c5af04d69a1699f945e08e
 
+cosign verify --key cosign.pub harishnshetty/frontend-signed:32
+```
 
 cosign sign --key cosign.key harishnshetty/test-signed:latest
 cosign verify --key cosign.pub harishnshetty/test-signed
