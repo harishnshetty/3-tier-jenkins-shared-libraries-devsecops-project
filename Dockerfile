@@ -1,9 +1,9 @@
-FROM mysql:5.7
+FROM mysql:9.6.0
 
-COPY appdb.sql /docker-entrypoint-initdb.d/
+LABEL maintainer="DevSecOps"
 
+COPY --chown=mysql:mysql appdb.sql /docker-entrypoint-initdb.d/
+
+HEALTHCHECK CMD mysqladmin ping -h localhost || exit 1
 USER mysql
-
 EXPOSE 3306
-CMD ["mysqld"]
-
