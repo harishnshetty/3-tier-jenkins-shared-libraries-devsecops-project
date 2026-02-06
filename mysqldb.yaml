@@ -3,41 +3,89 @@ kind: StatefulSet
 metadata:
   name: mysql
 spec:
+  serviceName: mysql
+  replicas: 1 # IMPORTANT: single instance unless clustering enabled
   selector:
     matchLabels:
       app: mysql
-  serviceName: mysql
-  replicas: 2
+
   template:
     metadata:
       labels:
         app: mysql
+
     spec:
+      securityContext:
+        fsGroup: 999
+
       containers:
         - name: mysql
-          image: harishnshetty/mysql-signed:1
+          image: harishnshetty/mysql:1
+          imagePullPolicy: Always
+
           ports:
             - containerPort: 3306
-              name: web
-          volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
+
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysecret
+                  name: mysql-secret
                   key: password
-            - name: MYSQL_ROOT_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mysecret
-                  key: username
+
+          securityContext:
+            runAsUser: 999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - "-h"
+                - localhost
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
   volumeClaimTemplates:
     - metadata:
-        name: mysql-persistent-storage
+        name: mysql-data
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
             storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  clusterIP: None
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
