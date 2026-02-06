@@ -24,6 +24,7 @@ pipeline{
         string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
 
         string(name: 'slackChannel', defaultValue: '#devsecops', description: 'Slack Channel')
+        string(name: 'emailAddress', defaultValue: 'harishn662@gmail.com', description: 'Email Address')
     }
 
     tools{
@@ -194,7 +195,7 @@ pipeline{
                 def buildStatus = currentBuild.currentResult
 
                 zpostslack(buildStatus)
-                // zpostemail(buildStatus)
+                zpostemail(buildStatus)
 
             }
         }
