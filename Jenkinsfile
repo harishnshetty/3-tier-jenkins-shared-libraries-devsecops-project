@@ -72,12 +72,12 @@ pipeline{
         //         }
         //     }
         // }
-        // stage('npm install'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         npmInstall()
-        //     }
-        // }
+        stage('npm install'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                npmInstall()
+            }
+        }
         
         // stage('Trivy file scan'){
         // when { expression { params.action == 'create'}}    
@@ -205,13 +205,6 @@ pipeline{
                 updateK8sDeploymentFile()
             }
         }
-
-        stage('show memory'){
-            steps{
-                sh 'free -h'
-            }
-        }
-
     // post {
     //     always {
     //          script{
