@@ -23,7 +23,7 @@ pipeline{
         string(name: 'gitUserName', defaultValue: 'harishnshetty', description: 'Git User Name')
         string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
 
-        string(name: 'slackChannel', defaultValue: '#devosecops_channel', description: 'Slack Channel')
+        string(name: 'slackChannel', defaultValue: '#devsecops', description: 'Slack Channel')
     }
 
     tools{
@@ -87,12 +87,12 @@ pipeline{
         // }
 
 
-        stage('OWASP FS SCAN') {
-            when { expression { params.action == 'create'} }
-            steps {
-                owaspdpcheck()
-            }
-        }
+        // stage('OWASP FS SCAN') {
+        //     when { expression { params.action == 'create'} }
+        //     steps {
+        //         owaspdpcheck()
+        //     }
+        // }
 
 
 
@@ -140,12 +140,13 @@ pipeline{
     //     }
 
     // }
+
         // stage('Manual Approval') {
         //     steps {
         //         script {
         //             try {
         //                 timeout(time: 10, unit: 'MINUTES') {
-        //                     input message: 'Approve to run the container'
+        //                     input message: 'Approve to update the k8s deployment frontend file'
         //                 }
         //                 env.APPROVED = "true"
         //             } catch (err) {
@@ -156,21 +157,54 @@ pipeline{
         //     }
         // }
 
-        stage('Manual Approval') {
-            steps {
-                script {
-                    try {
-                        timeout(time: 10, unit: 'MINUTES') {
-                            input message: 'Approve to update the k8s deployment frontend file'
-                        }
-                        env.APPROVED = "true"
-                    } catch (err) {
-                        echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
-                        env.APPROVED = "false"
-                    }
-                }
-            }
-        }
+
+        // stage('Manual Approval') {
+        //     steps {
+        //         script {
+
+        //             // Send Slack notification when approval required
+        //             slackSend(
+        //                 channel: params.slackChannel,
+        //                 color: 'warning',
+        //                 message: """
+        // 🚨 *Manual Approval Required*
+        // Job: ${env.JOB_NAME}
+        // Build: #${env.BUILD_NUMBER}
+
+        // Approve deployment for frontend K8s update.
+
+        // 👉 Open Jenkins:
+        // ${env.BUILD_URL}input
+        // """
+        //             )
+
+        //             try {
+        //                 timeout(time: 10, unit: 'MINUTES') {
+        //                     input message: 'Approve to update the k8s deployment frontend file'
+        //                 }
+
+        //                 env.APPROVED = "true"
+
+        //                 slackSend(
+        //                     channel: params.slackChannel,
+        //                     color: 'good',
+        //                     message: "✅ Deployment Approved - Build #${env.BUILD_NUMBER}"
+        //                 )
+
+        //             } catch (err) {
+
+        //                 echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
+        //                 env.APPROVED = "false"
+
+        //                 slackSend(
+        //                     channel: params.slackChannel,
+        //                     color: 'danger',
+        //                     message: "❌ Deployment NOT approved (timeout/abort) - Build #${env.BUILD_NUMBER}"
+        //                 )
+        //             }
+        //         }
+        //     }
+        // }
 
         // stage('Docker Run Container'){
         // when { expression { params.action == 'create'}}    
