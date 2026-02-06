@@ -37,6 +37,9 @@ pipeline{
         EXPOSE_PORT = 80
         BRANCH = 'deployment'
         MANIFESTFILENAME = 'frontend.yaml'
+        sonarServer = 'sonar-server'
+        sonarqubeCredentialsId = 'sonar-token'
+
     }
     stages{
 
@@ -58,42 +61,42 @@ pipeline{
                 gitleak()
             }
         }
-        // stage('sonarqube Analysis'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         sonarqubeAnalysis()
-        //     }
-        // }
-        // stage('sonarqube QualitGate'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         script{
-        //             def credentialsId = 'Sonar-token'
-        //             qualityGate(credentialsId)
-        //         }
-        //     }
-        // }
-        // stage('npm install'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         npmInstall()
-        //     }
-        // }
+        stage('sonarqube Analysis'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                sonarqubeAnalysis(sonarServer)
+            }
+        }
+
+        stage('sonarqube QualitGate'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                sonarqubequalitygate(sonarqubeCredentialsId)
+                }
+            }
+        }
+
+        stage('npm install'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                npmInstall()
+            }
+        }
         
-        // stage('Trivy file scan'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         trivyFs()
-        //     }
-        // }
+        stage('Trivy file scan'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                trivyFs()
+            }
+        }
 
 
-        // stage('OWASP FS SCAN') {
-        //     when { expression { params.action == 'create'} }
-        //     steps {
-        //         owaspdpcheck()
-        //     }
-        // }
+        stage('OWASP FS SCAN') {
+            when { expression { params.action == 'create'} }
+            steps {
+                owaspdpcheck()
+            }
+        }
 
 
 
@@ -105,63 +108,17 @@ pipeline{
         }
 
 
-        // stage('Trivy Image Scan'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         trivyImage()
-        //     }
-        // }
+        stage('Trivy Image Scan'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                trivyImage()
+            }
+        }
 
-        // stage('Docker Push To DockerHub'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         dockerPush()
-        //     }
-        // }
-
-
-
-    //     stage('Updating the k8s Deploymentfile'){
-    //         steps{
-    //             updateK8sDeploymentFile()
-    //         }
-    //     }
-
-            // stage('SBOM and Cosign Attestation'){
-            //     when { expression { params.action == 'create'}}    
-            //     steps{
-            //         trivyCosignEnforce()
-            //     }
-            // }
-    //     stage('commit and push to github'){
-    //         when { expression { params.action == 'create'}}    
-    //         steps{
-    //             commitAndPush()
-    //         }
-    //     }
-
-    // }
-
-        // stage('Manual Approval') {
-        //     steps {
-        //         script {
-        //             try {
-        //                 timeout(time: 10, unit: 'MINUTES') {
-        //                     input message: 'Approve to update the k8s deployment frontend file'
-        //                 }
-        //                 env.APPROVED = "true"
-        //             } catch (err) {
-        //                 echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
-        //                 env.APPROVED = "false"
-        //             }
-        //         }
-        //     }
-        // }
-
-
-        stage('Manual Approval') {
-            steps {
-                manualwithslack()
+        stage('Docker Push To DockerHub'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                dockerPush()
             }
         }
 
@@ -171,6 +128,32 @@ pipeline{
                 dockerRun()
             }
         }
+
+        stage('SBOM and Cosign Attestation'){
+            when { expression { params.action == 'create'}}    
+            steps{
+                trivyCosignEnforce()
+            }
+        }
+
+
+        stage('commit and push to github'){
+            when { expression { params.action == 'create'}}    
+            steps{
+                commitAndPush()
+            }
+        }
+
+    }
+
+
+
+        stage('Manual Approval') {
+            steps {
+                manualwithslack()
+            }
+        }
+
 
 
         stage('update k8s deployment frontend file') {
@@ -185,9 +168,6 @@ pipeline{
             }
         }
 
-        
-    }
-
     post {
         always {
             script {
@@ -200,5 +180,3 @@ pipeline{
             }
         }
     }
-
-}
