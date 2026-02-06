@@ -172,20 +172,6 @@ pipeline{
         }
 
 
-        // stage('Docker Run Container') {
-        //     when {
-        //         allOf {
-        //             expression { env.APPROVED == "true" }
-        //             expression { params.action == 'create' }
-        //         }
-        //     }
-        //     steps {
-        //         dockerRun()
-        //     }
-        // }
-
-
-
         stage('update k8s deployment frontend file') {
             when {
                 allOf {
@@ -197,17 +183,14 @@ pipeline{
                 updateK8sDeploymentFile()
             }
         }
-    // post {
-    //     always {
-    //          script{
-    //         echo 'Slack Notifications'
-    //         slackSend (
-    //             channel: params.slackChannel,
-    //             color: COLOR_MAP[currentBuild.currentResult],
-    //             message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} \n build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
-    //             )
-    //         }
-    //     }
-    
+
+        
+        post {
+            always {
+            zpostslack()
+            zpostemail()
+            }
+            
+        }
     }
 }
