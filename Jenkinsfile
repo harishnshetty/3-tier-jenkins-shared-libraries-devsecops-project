@@ -51,12 +51,12 @@ pipeline{
                 checkoutGit(params.gitUrl, params.gitBranch)
             }
         }
-        // stage('gitleak'){
-        //     when { expression { params.action == 'create'}}    
-        //     steps{
-        //         gitleak()
-        //     }
-        // }
+        stage('gitleak'){
+            when { expression { params.action == 'create'}}    
+            steps{
+                gitleak()
+            }
+        }
         // stage('sonarqube Analysis'){
         // when { expression { params.action == 'create'}}    
         //     steps{
@@ -164,10 +164,8 @@ pipeline{
 
                     // Send Slack notification when approval required
                     slackSend(
-                        tokenCredentialId: 'slackcred',
                         channel: params.slackChannel,
                         color: 'warning',
-                        botUser: true,
                         message: """
         🚨 *Manual Approval Required*
         Job: ${env.JOB_NAME}
@@ -188,10 +186,8 @@ pipeline{
                         env.APPROVED = "true"
 
                         slackSend(
-                            tokenCredentialId: 'slackcred',
                             channel: params.slackChannel,
                             color: 'good',
-                            botUser: true,
                             message: "✅ Deployment Approved - Build #${env.BUILD_NUMBER}"
                         )
 
@@ -201,10 +197,8 @@ pipeline{
                         env.APPROVED = "false"
 
                         slackSend(
-                            tokenCredentialId: 'slackcred',
                             channel: params.slackChannel,
                             color: 'danger',
-                            botUser: true,
                             message: "❌ Deployment NOT approved (timeout/abort) - Build #${env.BUILD_NUMBER}"
                         )
                     }
