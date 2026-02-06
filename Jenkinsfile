@@ -74,8 +74,7 @@ pipeline{
                 sonarqubequalitygate(sonarqubeCredentialsId)
                 }
             }
-        }
-
+        
         stage('npm install'){
         when { expression { params.action == 'create'}}    
             steps{
@@ -144,10 +143,6 @@ pipeline{
             }
         }
 
-    }
-
-
-
         stage('Manual Approval') {
             steps {
                 manualwithslack()
@@ -167,6 +162,7 @@ pipeline{
                 updateK8sDeploymentFile()
             }
         }
+    }
 
     post {
         always {
@@ -180,3 +176,4 @@ pipeline{
             }
         }
     }
+}
