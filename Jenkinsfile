@@ -87,23 +87,12 @@ pipeline{
         // }
 
 
-// stage('OWASP FS SCAN') {
-//     when { expression { params.action == 'create'} }
-//     steps {
-//         dependencyCheck(
-//             odcInstallation: 'dp-check',
-//             additionalArguments: '''
-//                 --scan .
-//                 --disableYarnAudit
-//                 --disableNodeAudit
-//             '''
-//         )
-
-//         dependencyCheckPublisher(
-//             pattern: '**/dependency-check-report-*.xml'
-//         )
-//     }
-// }
+        stage('OWASP FS SCAN') {
+            when { expression { params.action == 'create'} }
+            steps {
+                owaspdpcheck()
+            }
+        }
 
 
 
