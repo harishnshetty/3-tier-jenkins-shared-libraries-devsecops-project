@@ -23,7 +23,7 @@ spec:
             - ALL
       containers:
         - name: frontend
-          image: harishnshetty/frontend-signed:52
+          image: harishnshetty/frontend-signed:62
           resources:
             limits:
               memory: "128Mi"
