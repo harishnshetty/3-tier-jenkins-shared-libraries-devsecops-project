@@ -185,12 +185,12 @@ pipeline{
         }
 
         
-        post {
-            always {
+    }
+
+    post {
+        always {
             zpostslack()
             zpostemail()
-            }
-            
         }
     }
 }
