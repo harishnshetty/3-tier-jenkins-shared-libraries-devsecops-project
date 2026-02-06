@@ -34,8 +34,8 @@ pipeline{
         SCANNER_HOME = tool 'sonar-scanner'
         CONTAINER_PORT = 80
         EXPOSE_PORT = 80
+        BRANCH = 'deployment'
         MANIFESTFILENAME = 'frontend.yaml'
-        BRANCH = 'frontend'
     }
     stages{
 
