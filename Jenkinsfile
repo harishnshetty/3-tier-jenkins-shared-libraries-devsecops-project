@@ -164,6 +164,7 @@ pipeline{
 
                     // Send Slack notification when approval required
                     slackSend(
+                        tokenCredentialId: 'slackcred',
                         channel: params.slackChannel,
                         color: 'warning',
                         message: """
@@ -186,6 +187,7 @@ pipeline{
                         env.APPROVED = "true"
 
                         slackSend(
+                            tokenCredentialId: 'slackcred',
                             channel: params.slackChannel,
                             color: 'good',
                             message: "✅ Deployment Approved - Build #${env.BUILD_NUMBER}"
@@ -197,6 +199,7 @@ pipeline{
                         env.APPROVED = "false"
 
                         slackSend(
+                            tokenCredentialId: 'slackcred',
                             channel: params.slackChannel,
                             color: 'danger',
                             message: "❌ Deployment NOT approved (timeout/abort) - Build #${env.BUILD_NUMBER}"
