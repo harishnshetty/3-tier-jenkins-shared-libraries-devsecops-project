@@ -136,13 +136,6 @@ pipeline{
         }
 
 
-        stage('commit and push to github'){
-            when { expression { params.action == 'create'}}    
-            steps{
-                commitAndPush()
-            }
-        }
-
         stage('Manual Approval') {
             steps {
                 manualwithslack()
