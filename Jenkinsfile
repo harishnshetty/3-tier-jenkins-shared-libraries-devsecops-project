@@ -189,8 +189,15 @@ pipeline{
 
     post {
         always {
-            zpostslack()
-            zpostemail()
+            script {
+
+                def buildStatus = currentBuild.currentResult
+
+                zpostslack(buildStatus)
+                // zpostemail(buildStatus)
+
+            }
         }
     }
+
 }
