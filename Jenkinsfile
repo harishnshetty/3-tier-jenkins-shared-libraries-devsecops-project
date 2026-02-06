@@ -195,7 +195,7 @@ pipeline{
                 def buildStatus = currentBuild.currentResult
 
                 zpostslack(buildStatus)
-                zpostemail(buildStatus)
+                zpostemail(buildStatus, params.emailAddress)
 
             }
         }
