@@ -167,6 +167,7 @@ pipeline{
                         tokenCredentialId: 'slackcred',
                         channel: params.slackChannel,
                         color: 'warning',
+                        botUser: true,
                         message: """
         🚨 *Manual Approval Required*
         Job: ${env.JOB_NAME}
@@ -190,6 +191,7 @@ pipeline{
                             tokenCredentialId: 'slackcred',
                             channel: params.slackChannel,
                             color: 'good',
+                            botUser: true,
                             message: "✅ Deployment Approved - Build #${env.BUILD_NUMBER}"
                         )
 
@@ -202,6 +204,7 @@ pipeline{
                             tokenCredentialId: 'slackcred',
                             channel: params.slackChannel,
                             color: 'danger',
+                            botUser: true,
                             message: "❌ Deployment NOT approved (timeout/abort) - Build #${env.BUILD_NUMBER}"
                         )
                     }
