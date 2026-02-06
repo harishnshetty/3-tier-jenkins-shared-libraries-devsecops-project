@@ -51,12 +51,12 @@ pipeline{
                 checkoutGit(params.gitUrl, params.gitBranch)
             }
         }
-        stage('gitleak'){
-            when { expression { params.action == 'create'}}    
-            steps{
-                gitleak()
-            }
-        }
+        // stage('gitleak'){
+        //     when { expression { params.action == 'create'}}    
+        //     steps{
+        //         gitleak()
+        //     }
+        // }
         // stage('sonarqube Analysis'){
         // when { expression { params.action == 'create'}}    
         //     steps{
@@ -72,12 +72,12 @@ pipeline{
         //         }
         //     }
         // }
-        stage('npm install'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                npmInstall()
-            }
-        }
+        // stage('npm install'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         npmInstall()
+        //     }
+        // }
         
         // stage('Trivy file scan'){
         // when { expression { params.action == 'create'}}    
@@ -104,19 +104,19 @@ pipeline{
         }
 
 
-        stage('Trivy Image Scan'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                trivyImage()
-            }
-        }
+        // stage('Trivy Image Scan'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         trivyImage()
+        //     }
+        // }
 
-        stage('Docker Push To DockerHub'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                dockerPush()
-            }
-        }
+        // stage('Docker Push To DockerHub'){
+        // when { expression { params.action == 'create'}}    
+        //     steps{
+        //         dockerPush()
+        //     }
+        // }
 
 
 
@@ -126,12 +126,12 @@ pipeline{
     //         }
     //     }
 
-            stage('SBOM and Cosign Attestation'){
-                when { expression { params.action == 'create'}}    
-                steps{
-                    trivyCosignEnforce()
-                }
-            }
+            // stage('SBOM and Cosign Attestation'){
+            //     when { expression { params.action == 'create'}}    
+            //     steps{
+            //         trivyCosignEnforce()
+            //     }
+            // }
     //     stage('commit and push to github'){
     //         when { expression { params.action == 'create'}}    
     //         steps{
@@ -158,60 +158,60 @@ pipeline{
         // }
 
 
-        // stage('Manual Approval') {
-        //     steps {
-        //         script {
+        stage('Manual Approval') {
+            steps {
+                script {
 
-        //             // Send Slack notification when approval required
-        //             slackSend(
-        //                 channel: params.slackChannel,
-        //                 color: 'warning',
-        //                 message: """
-        // 🚨 *Manual Approval Required*
-        // Job: ${env.JOB_NAME}
-        // Build: #${env.BUILD_NUMBER}
+                    // Send Slack notification when approval required
+                    slackSend(
+                        channel: params.slackChannel,
+                        color: 'warning',
+                        message: """
+        🚨 *Manual Approval Required*
+        Job: ${env.JOB_NAME}
+        Build: #${env.BUILD_NUMBER}
 
-        // Approve deployment for frontend K8s update.
+        Approve deployment for frontend K8s update.
 
-        // 👉 Open Jenkins:
-        // ${env.BUILD_URL}input
-        // """
-        //             )
+        👉 Open Jenkins:
+        ${env.BUILD_URL}input
+        """
+                    )
 
-        //             try {
-        //                 timeout(time: 10, unit: 'MINUTES') {
-        //                     input message: 'Approve to update the k8s deployment frontend file'
-        //                 }
+                    try {
+                        timeout(time: 10, unit: 'MINUTES') {
+                            input message: 'Approve to update the k8s deployment frontend file'
+                        }
 
-        //                 env.APPROVED = "true"
+                        env.APPROVED = "true"
 
-        //                 slackSend(
-        //                     channel: params.slackChannel,
-        //                     color: 'good',
-        //                     message: "✅ Deployment Approved - Build #${env.BUILD_NUMBER}"
-        //                 )
+                        slackSend(
+                            channel: params.slackChannel,
+                            color: 'good',
+                            message: "✅ Deployment Approved - Build #${env.BUILD_NUMBER}"
+                        )
 
-        //             } catch (err) {
+                    } catch (err) {
 
-        //                 echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
-        //                 env.APPROVED = "false"
+                        echo "⏭️ Approval not granted (aborted or timeout). Skipping deployment."
+                        env.APPROVED = "false"
 
-        //                 slackSend(
-        //                     channel: params.slackChannel,
-        //                     color: 'danger',
-        //                     message: "❌ Deployment NOT approved (timeout/abort) - Build #${env.BUILD_NUMBER}"
-        //                 )
-        //             }
-        //         }
-        //     }
-        // }
+                        slackSend(
+                            channel: params.slackChannel,
+                            color: 'danger',
+                            message: "❌ Deployment NOT approved (timeout/abort) - Build #${env.BUILD_NUMBER}"
+                        )
+                    }
+                }
+            }
+        }
 
-        // stage('Docker Run Container'){
-        // when { expression { params.action == 'create'}}    
-        //     steps{
-        //         dockerRun()
-        //     }
-        // }
+        stage('Docker Run Container'){
+        when { expression { params.action == 'create'}}    
+            steps{
+                dockerRun()
+            }
+        }
 
 
         // stage('Docker Run Container') {
