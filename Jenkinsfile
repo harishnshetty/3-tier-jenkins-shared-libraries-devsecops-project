@@ -38,7 +38,7 @@ pipeline{
         BRANCH = 'deployment'
         MANIFESTFILENAME = 'frontend.yaml'
         sonarServer = 'sonar-server'
-        sonarqubeCredentialsId = 'sonar-token'
+        sonarqubeCredentialsId = 'Sonar-token'
 
     }
     stages{
