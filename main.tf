@@ -67,7 +67,7 @@ resource "aws_iam_role_policy_attachment" "eks_node_group_ecr_policy_attachment"
   role       = aws_iam_role.eks_node_group_role.name
 }
 resource "aws_iam_role_policy_attachment" "eks_node_group_ebs_csi_driver_policy_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEBSCSIDriverPolicy"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
   role       = aws_iam_role.eks_node_group_role.name
 }
 
@@ -109,11 +109,11 @@ data "aws_iam_policy_document" "eks_oidc_assume_role_policy" {
 
 resource "aws_iam_role" "eks_oidc" {
   assume_role_policy = data.aws_iam_policy_document.eks_oidc_assume_role_policy.json
-  name               = "eks-oidc"
+  name               = "eks-oidc-${var.cluster_name}"
 }
 
 resource "aws_iam_policy" "eks-oidc-policy" {
-  name = "test-policy"
+  name = "test-policy-${var.cluster_name}"
 
   policy = jsonencode({
     Statement = [{
@@ -156,11 +156,47 @@ resource "aws_eks_node_group" "node-group" {
   ]
 }
 
+# EBS CSI Driver Role
+data "aws_iam_policy_document" "ebs_csi_driver_trust_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:sub"
+      values   = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "ebs_csi_driver_role" {
+  name               = "ebs-csi-driver-role-${var.cluster_name}"
+  assume_role_policy = data.aws_iam_policy_document.ebs_csi_driver_trust_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi_driver_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.ebs_csi_driver_role.name
+}
+
 resource "aws_eks_addon" "eks-addons" {
-  for_each      = var.addons
-  cluster_name  = aws_eks_cluster.eks_cluster.name
-  addon_name    = each.value.name
-  addon_version = each.value.version
+  for_each                 = var.addons
+  cluster_name             = aws_eks_cluster.eks_cluster.name
+  addon_name               = each.value.name
+  addon_version            = each.value.version
+  service_account_role_arn = each.value.name == "aws-ebs-csi-driver" ? aws_iam_role.ebs_csi_driver_role.arn : null
 
   depends_on = [
     aws_eks_node_group.node-group,

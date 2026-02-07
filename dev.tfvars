@@ -15,18 +15,18 @@ instance_types = ["t3.medium"]
 addons = {
   "vpc-cni" = {
     name    = "vpc-cni"
-    version = "v1.18.0-eksbuild.1"
+    version = "v1.21.1-eksbuild.3"
   },
   "coredns" = {
     name    = "coredns"
-    version = "v1.11.1-eksbuild.1"
+    version = "v1.12.3-eksbuild.1"
   },
   "kube-proxy" = {
     name    = "kube-proxy"
-    version = "v1.28.0-eksbuild.1"
+    version = "v1.34.3-eksbuild.2"
   },
   "aws-ebs-csi-driver" = {
     name    = "aws-ebs-csi-driver"
-    version = "v1.28.0-eksbuild.1"
+    version = "v1.55.0-eksbuild.2"
   }
 }

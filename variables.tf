@@ -54,6 +54,6 @@ variable "is_eks_role_enabled" {
 variable "addons" {
   type = map(object({
     name    = string
-    version = string
+    version = optional(string)
   }))
 }
