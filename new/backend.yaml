@@ -32,6 +32,16 @@ spec:
             requests:
               memory: "64Mi"
               cpu: "128m"
+          env:
+            - name: DB_HOST
+              value: "mysql"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
           ports:
             - containerPort: 4000
 
