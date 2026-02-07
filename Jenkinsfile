@@ -1,3 +1,7 @@
+def COLOR_MAP = [
+    'FAILURE' : 'danger',
+    'SUCCESS' : 'good'
+]
 pipeline {
     agent any
 
@@ -6,6 +10,8 @@ pipeline {
         string(name: 'gitUrl', defaultValue: 'https://github.com/harishnshetty/3-tier-jenkins-shared-libraries-devsecops-project.git', description: 'Git URL')
         string(name: 'gitBranch', defaultValue: 'eks-terraform', description: 'Git Branch')
         string(name: 'varfile', defaultValue: 'dev', description: 'Environment to deploy')
+
+        string(name: 'slackChannel', defaultValue: '#devsecops', description: 'Slack channel to send notifications')
     }
     environment {
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -88,5 +94,15 @@ pipeline {
                 }
             }
         }
+
+    post{
+        always{
+            slackSend(
+                channel: params.slackChannel,
+                color: buildStatus == 'SUCCESS' ? 'good' : 'danger',
+                message: "Pipeline completed for ${env.JOB_NAME} - ${env.BUILD_NUMBER}"
+            )
+        }
+    }  
     }
 }
