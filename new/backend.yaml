@@ -10,15 +10,15 @@ spec:
   template:
     metadata:
       labels:
-        app: frontend
+        app: backend
     spec:
       securityContext:
-        runAsUser: 101
-        runAsGroup: 101
-        fsGroup: 101
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
       containers:
         - name: backend
-          image: harishnshetty/backend-signed:1
+          image: harishnshetty/backend-signed:latest
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -33,25 +33,17 @@ spec:
               memory: "64Mi"
               cpu: "128m"
           ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: nginx-config
-              mountPath: /etc/nginx/conf.d/default.conf
-              subPath: default.conf
-      volumes:
-        - name: nginx-config
-          configMap:
-            name: frontend-configmap
+            - containerPort: 4000
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-svc
+  name: backend-svc
 spec:
   selector:
-    app: frontend
+    app: backend
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 4000
+      targetPort: 4000

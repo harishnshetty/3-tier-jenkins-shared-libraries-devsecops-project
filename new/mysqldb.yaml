@@ -20,7 +20,7 @@ spec:
 
       containers:
         - name: mysql
-          image: harishnshetty/mysql:1
+          image: harishnshetty/mysql:2
           imagePullPolicy: Always
 
           ports:
