@@ -11,18 +11,18 @@ spec:
     - name: http
       port: 80
       protocol: HTTP
-      hostname: "harishshetty.xyz" # Replace with your domain
+      hostname: "*.harishshetty.xyz"
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       port: 443
       protocol: HTTPS
-      hostname: "harishshetty.xyz" # Replace with your domain
+      hostname: "*.harishshetty.xyz"
       tls:
         mode: Terminate
         certificateRefs:
-          - name: example-com-tls # cert-manager will create this secret
+          - name: harishshetty-tls
       allowedRoutes:
         namespaces:
           from: All
