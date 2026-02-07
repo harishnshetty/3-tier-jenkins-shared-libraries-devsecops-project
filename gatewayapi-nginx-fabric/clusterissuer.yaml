@@ -9,8 +9,10 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod-account-key
     solvers:
-      - http01:
-          gatewayHTTPRoute:
-            parentRefs:
-              - name: my-gateway # name of the gateway
-                namespace: nginx-gateway # namespace of the gateway
+      - dns01:
+          route53:
+            region: ap-south-1
+        selector:
+          dnsZones:
+            - "harishshetty.xyz"
+            - "*.harishshetty.xyz"

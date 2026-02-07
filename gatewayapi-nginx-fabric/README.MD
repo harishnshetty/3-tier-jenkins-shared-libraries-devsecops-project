@@ -14,3 +14,5 @@ helm install cert-manager jetstack/cert-manager \
 
 
  kubectl apply -f clusterissuer.yaml
+
+ helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway

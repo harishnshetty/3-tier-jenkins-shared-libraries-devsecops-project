@@ -10,6 +10,4 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - "harishshetty.xyz"
-    - "argo.harishshetty.xyz"
-    - "app.harishshetty.xyz"
-    - "grafana.harishshetty.xyz"
+    - "*.harishshetty.xyz"
