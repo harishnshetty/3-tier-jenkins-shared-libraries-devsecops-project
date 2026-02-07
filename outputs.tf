@@ -1,5 +1,5 @@
 output "eks_cluster_role_arn" {
-  value = var.is_eks_role_enabled ? aws_iam_role.example.arn : null
+  value = var.is_eks_role_enabled ? aws_iam_role.eks_cluster_role.arn : null
 }
 
 

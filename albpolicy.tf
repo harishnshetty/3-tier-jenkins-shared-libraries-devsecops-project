@@ -7,13 +7,13 @@ data "aws_iam_policy_document" "alb_controller_trust_policy" {
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_eks_cluster.example.identity[0].oidc[0].issuer, "https://", "")}:sub"
+      variable = "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values   = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_eks_cluster.example.identity[0].oidc[0].issuer, "https://", "")}:aud"
+      variable = "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:aud"
       values   = ["sts.amazonaws.com"]
     }
 

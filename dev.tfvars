@@ -1,11 +1,13 @@
 region = "ap-south-1"
 
-cluster_name    = "my-cluster"
-node_group_name = "ondemand-node-group"
-
-desired_size = 2
-min_size     = 2
-max_size     = 3
+cluster_name                    = "my-cluster"
+cluster_version                 = "1.34"
+node_group_name                 = "ondemand-node-group"
+cluster_endpoint_private_access = true
+cluster_endpoint_public_access  = true
+desired_size                    = 2
+min_size                        = 2
+max_size                        = 3
 
 
 instance_types = ["t3.medium"]

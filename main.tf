@@ -1,24 +1,11 @@
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["eks.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
-}
-
-resource "aws_iam_role" "example" {
+resource "aws_iam_role" "eks_cluster_role" {
   name               = "eks-cluster-cloud"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "eks_cluster_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.example.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 #get vpc data
@@ -26,29 +13,26 @@ data "aws_vpc" "default" {
   default = true
 }
 #get public subnets for cluster
-data "aws_subnets" "public" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-#cluster provision
-resource "aws_eks_cluster" "example" {
-  name     = var.cluster_name
-  role_arn = aws_iam_role.example.arn
 
+#cluster provision
+resource "aws_eks_cluster" "eks_cluster" {
+  name     = var.cluster_name
+  role_arn = aws_iam_role.eks_cluster_role.arn
+  version  = var.cluster_version
   vpc_config {
-    subnet_ids = data.aws_subnets.public.ids
+    subnet_ids              = data.aws_subnets.public.ids
+    endpoint_private_access = var.cluster_endpoint_private_access
+    endpoint_public_access  = var.cluster_endpoint_public_access
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
   # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
   depends_on = [
-    aws_iam_role_policy_attachment.example-AmazonEKSClusterPolicy,
+    aws_iam_role_policy_attachment.eks_cluster_policy_attachment,
   ]
 }
 
-resource "aws_iam_role" "example1" {
+resource "aws_iam_role" "eks_node_group_role" {
   name = "eks-node-group-cloud"
 
   assume_role_policy = jsonencode({
@@ -68,40 +52,40 @@ resource "random_integer" "random_suffix" {
   max = 9999
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEKSWorkerNodePolicy" {
+resource "aws_iam_role_policy_attachment" "eks_node_group_worker_node_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.example1.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEKS_CNI_Policy" {
+resource "aws_iam_role_policy_attachment" "eks_node_group_cni_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.example1.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "example-AmazonEC2ContainerRegistryReadOnly" {
+resource "aws_iam_role_policy_attachment" "eks_node_group_ecr_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.example1.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
-resource "aws_iam_role_policy_attachment" "eks-AmazonEBSCSIDriverPolicy" {
+resource "aws_iam_role_policy_attachment" "eks_node_group_ebs_csi_driver_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEBSCSIDriverPolicy"
-  role       = aws_iam_role.example1.name
+  role       = aws_iam_role.eks_node_group_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "alb_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.example.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 
 # OIDC
 data "tls_certificate" "eks" {
-  url = aws_eks_cluster.example.identity[0].oidc[0].issuer
+  url = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
 }
 
 resource "aws_iam_openid_connect_provider" "eks" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.eks.certificates[0].sha1_fingerprint]
-  url             = aws_eks_cluster.example.identity[0].oidc[0].issuer
+  url             = aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer
 }
 
 # OIDC
@@ -112,7 +96,7 @@ data "aws_iam_policy_document" "eks_oidc_assume_role_policy" {
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_eks_cluster.example.identity[0].oidc[0].issuer, "https://", "")}:sub"
+      variable = "${replace(aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values   = ["system:serviceaccount:default:aws-test"]
     }
 
@@ -147,11 +131,11 @@ resource "aws_iam_policy" "eks-oidc-policy" {
 
 
 #create node group
-resource "aws_eks_node_group" "example" {
-  cluster_name = aws_eks_cluster.example.name
+resource "aws_eks_node_group" "node-group" {
+  cluster_name = aws_eks_cluster.eks_cluster.name
 
   node_group_name = var.node_group_name
-  node_role_arn   = aws_iam_role.example1.arn
+  node_role_arn   = aws_iam_role.eks_node_group_role.arn
   subnet_ids      = data.aws_subnets.public.ids
 
   scaling_config {
@@ -166,19 +150,19 @@ resource "aws_eks_node_group" "example" {
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
   depends_on = [
-    aws_iam_role_policy_attachment.example-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.example-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.example-AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.eks_node_group_worker_node_policy_attachment,
+    aws_iam_role_policy_attachment.eks_node_group_cni_policy_attachment,
+    aws_iam_role_policy_attachment.eks_node_group_ecr_policy_attachment,
   ]
 }
 
 resource "aws_eks_addon" "eks-addons" {
   for_each      = var.addons
-  cluster_name  = aws_eks_cluster.example.name
+  cluster_name  = aws_eks_cluster.eks_cluster.name
   addon_name    = each.value.name
   addon_version = each.value.version
 
   depends_on = [
-    aws_eks_node_group.example,
+    aws_eks_node_group.node-group,
   ]
 }

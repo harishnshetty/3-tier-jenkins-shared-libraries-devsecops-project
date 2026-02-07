@@ -5,6 +5,21 @@ variable "region" {
 variable "cluster_name" {
   type = string
 }
+
+variable "cluster_version" {
+  type = string
+}
+
+variable "cluster_endpoint_private_access" {
+  type    = bool
+  default = true
+}
+
+variable "cluster_endpoint_public_access" {
+  type    = bool
+  default = true
+}
+
 variable "node_group_name" {
   type = string
 }

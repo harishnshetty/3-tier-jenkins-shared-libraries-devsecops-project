@@ -6,6 +6,6 @@ resource "kubernetes_service_account_v1" "alb_controller_sa" {
       "eks.amazonaws.com/role-arn" = aws_iam_role.alb_controller_role[0].arn
     }
   }
-  depends_on = [aws_eks_cluster.example, aws_eks_node_group.example]
+  depends_on = [aws_eks_cluster.eks_cluster, aws_eks_node_group.node-group]
 }
 
