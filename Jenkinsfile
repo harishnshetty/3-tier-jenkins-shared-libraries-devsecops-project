@@ -99,8 +99,12 @@ pipeline {
         always{
             slackSend(
                 channel: params.slackChannel,
-                color: buildStatus == 'SUCCESS' ? 'good' : 'danger',
-                message: "Pipeline completed for ${env.JOB_NAME} - ${env.BUILD_NUMBER}"
+                color: COLOR_MAP[currentBuild.result],
+                message: """
+                Pipeline completed for ${env.JOB_NAME} - ${env.BUILD_NUMBER}
+                aws eks update-kubeconfig --region ${env.AWS_DEFAULT_REGION} --name ${env.cluster_name}
+                """
+
             )
         }
     }  

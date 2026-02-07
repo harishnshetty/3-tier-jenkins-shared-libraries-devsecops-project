@@ -286,3 +286,9 @@ resource "aws_iam_policy" "alb_controller_policy" {
     ]
   })
 }
+
+resource "aws_iam_role_policy_attachment" "alb_controller_policy_attachment" {
+  count      = var.is_alb_controller_enabled ? 1 : 0
+  policy_arn = aws_iam_policy.alb_controller_policy.arn
+  role       = aws_iam_role.alb_controller_role[0].name
+}

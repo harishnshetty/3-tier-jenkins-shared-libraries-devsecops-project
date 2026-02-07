@@ -1,0 +1,47 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argo-route
+  namespace: nginx-gateway # Adjust if your apps are in different namespaces
+spec:
+  parentRefs:
+    - name: my-gateway
+      namespace: nginx-gateway
+  hostnames:
+    - "argo.harishshetty.xyz"
+  rules:
+    - backendRefs:
+        - name: argocd-server
+          port: 80 # Adjust port if needed (usually 80 or 443 for ArgoCD service)
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana-route
+  namespace: nginx-gateway
+spec:
+  parentRefs:
+    - name: my-gateway
+      namespace: nginx-gateway
+  hostnames:
+    - "grafana.harishshetty.xyz"
+  rules:
+    - backendRefs:
+        - name: grafana
+          port: 80 # Adjust to your Grafana service port
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-route
+  namespace: nginx-gateway
+spec:
+  parentRefs:
+    - name: my-gateway
+      namespace: nginx-gateway
+  hostnames:
+    - "app.harishshetty.xyz"
+  rules:
+    - backendRefs:
+        - name: app-service
+          port: 80 # Adjust to your App service port
