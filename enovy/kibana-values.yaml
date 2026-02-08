@@ -1,0 +1,9 @@
+resources:
+  requests:
+    cpu: "50m"
+    memory: "256M"
+  limits:
+    cpu: "500m"
+    memory: "512M"
+service:
+  type: ClusterIP

@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flipkart
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: flipkart
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: flipkart
+    spec:
+      containers:
+        - image: harishnshetty/flipkart:latest
+          name: flipkart
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flipkart-svc
+  namespace: default
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: flipkart
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: flipkart-route
+  namespace: default
+spec:
+  parentRefs:
+    - name: external-gateway
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - flipkart.harishshetty.xyz
+  rules:
+    - backendRefs:
+        - kind: Service
+          name: flipkart-svc
+          port: 80
