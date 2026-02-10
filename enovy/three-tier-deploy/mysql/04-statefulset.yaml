@@ -1,0 +1,185 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: db
+spec:
+  serviceName: mysql-headless
+  replicas: 3
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+        tier: database
+    spec:
+      terminationGracePeriodSeconds: 60
+
+      securityContext:
+        fsGroup: 999
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: mysql
+                topologyKey: kubernetes.io/hostname
+
+      initContainers:
+        - name: init-mysql
+          image: mysql:8.0
+          command:
+            - bash
+            - -lc
+            - |
+              set -e
+              ORDINAL=$(hostname | awk -F'-' '{print $NF}')
+              if [ "$ORDINAL" = "0" ]; then
+                cp /config/primary.cnf /etc/mysql/conf.d/server.cnf
+              else
+                cp /config/replica.cnf /etc/mysql/conf.d/server.cnf
+              fi
+
+              # ensure unique server-id per pod
+              echo "" >> /etc/mysql/conf.d/server.cnf
+              echo "server-id=$((100 + ORDINAL))" >> /etc/mysql/conf.d/server.cnf
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: conf
+              mountPath: /etc/mysql/conf.d
+
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_REPL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_REPL_PASSWORD
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+            - name: conf
+              mountPath: /etc/mysql/conf.d
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - -lc
+                - "mysqladmin ping -uroot -p$MYSQL_ROOT_PASSWORD"
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -lc
+                - "mysqladmin ping -uroot -p$MYSQL_ROOT_PASSWORD"
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+        - name: replication-sidecar
+          image: mysql:8.0
+          command:
+            - bash
+            - -lc
+            - |
+              set -e
+
+              ORDINAL=$(hostname | awk -F'-' '{print $NF}')
+              if [ "$ORDINAL" = "0" ]; then
+                echo "Primary pod: no replica setup needed."
+                sleep infinity
+              fi
+
+              # wait for mysql to be ready
+              until mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent; do
+                echo "waiting for local mysql..."
+                sleep 3
+              done
+
+              # try to configure replication from mysql-0
+              PRIMARY_HOST="mysql-0.mysql-headless.db.svc.cluster.local"
+
+              # If already configured, this is idempotent enough for lab.
+              mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "
+                STOP REPLICA;
+                RESET REPLICA ALL;
+                CHANGE REPLICATION SOURCE TO
+                  SOURCE_HOST='${PRIMARY_HOST}',
+                  SOURCE_USER='repl',
+                  SOURCE_PASSWORD='${MYSQL_REPL_PASSWORD}',
+                  SOURCE_AUTO_POSITION=1;
+                START REPLICA;
+              " || true
+
+              echo "Replica configured (or attempted)."
+              sleep infinity
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_REPL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_REPL_PASSWORD
+
+      volumes:
+        - name: config
+          configMap:
+            name: mysql-config
+        - name: initdb
+          configMap:
+            name: mysql-config
+            items:
+              - key: init.sql
+                path: init.sql
+        - name: conf
+          emptyDir: {}
+
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: gp2
+        resources:
+          requests:
+            storage: 1Gi
