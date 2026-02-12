@@ -90,10 +90,11 @@ dist
 
 # vuepress build output
 .vuepress/dist
-
+reports
 # vuepress v2.x temp and cache directory
 .temp
 .cache
+node_modules
 
 # Sveltekit cache directory
 .svelte-kit/
