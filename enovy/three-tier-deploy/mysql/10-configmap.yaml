@@ -2,9 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frontend-configmap
+  namespace: db
 data:
-  key: nginx.conf
-  value: |
+  default.conf: |
     log_format json_combined escape=json
     '{'
       '"time":"$time_iso8601",'
@@ -34,6 +34,7 @@ data:
         }
 
         location /api/ {
+            rewrite ^/api/(.*) /$1 break;
             proxy_pass http://backend-svc:4000;
             proxy_http_version 1.1;
 

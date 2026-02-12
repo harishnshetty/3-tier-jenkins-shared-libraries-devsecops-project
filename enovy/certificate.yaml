@@ -2,13 +2,16 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: harishshetty-tls
-  namespace: cert-manager
+  namespace: gateway
 spec:
   secretName: harishshetty-tls
+
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "*.harishshetty.xyz"
+
   dnsNames:
     - "*.harishshetty.xyz"
     - "harishshetty.xyz"
+# watch kubectl get certificate -n gateway
+# kubectl get secret harishshetty-tls -n gateway

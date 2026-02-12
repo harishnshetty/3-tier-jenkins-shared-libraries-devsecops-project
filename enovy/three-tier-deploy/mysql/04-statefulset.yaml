@@ -41,7 +41,10 @@ spec:
             - -lc
             - |
               set -e
-              ORDINAL=$(hostname | awk -F'-' '{print $NF}')
+              HOST=$(cat /etc/hostname)
+              echo "Debug Hostname: $HOST"
+              ORDINAL=${HOST##*-}
+              echo "Debug Ordinal: $ORDINAL"
               if [ "$ORDINAL" = "0" ]; then
                 cp /config/primary.cnf /etc/mysql/conf.d/server.cnf
               else
@@ -120,7 +123,7 @@ spec:
             - |
               set -e
 
-              ORDINAL=$(hostname | awk -F'-' '{print $NF}')
+              ORDINAL=${HOSTNAME##*-}
               if [ "$ORDINAL" = "0" ]; then
                 echo "Primary pod: no replica setup needed."
                 sleep infinity

@@ -76,26 +76,3 @@ spec:
           name: kibana-kibana
           namespace: elk
           port: 5601
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: 3tier-route
-  namespace: default
-spec:
-  parentRefs:
-    - name: external-gateway
-      namespace: gateway
-  sectionName: https # Attach to the HTTPS listener
-  hostnames:
-    - 3tier.harishshetty.xyz
-  rules:
-    - matches:
-        - path:
-          type: PathPrefix
-          value: /
-    - backendRefs:
-        - kind: Service
-          name: frontend-svc
-          namespace: default
-          port: 80

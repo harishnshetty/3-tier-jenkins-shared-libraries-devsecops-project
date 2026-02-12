@@ -1,3 +1,5 @@
+aws eks update-kubeconfig --name my-cluster --region ap-south-1
+
 kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.1/standard-install.yaml
 
 
@@ -25,19 +27,19 @@ kubectl wait --timeout=2m -n envoy-gateway-system \
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
+helm search repo cert-manager
+
+
+
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
   --version v1.19.3 \
-  --set installCRDs=true
-
-
-  helm upgrade cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --reuse-values \
+  --set crds.enabled=true \
   --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::970378220457:role/cert-manager-iam-role"
 
 
+helm uninstall cert-manager -n cert-manager
 
 kubectl create namespace argocd
 
@@ -122,3 +124,31 @@ helm install filebeat elastic/filebeat -n elk --create-namespace -f filebeat-val
   $ kubectl get secrets --namespace=elk elasticsearch-master-credentials -ojsonpath='{.data.password}' | base64 -d
 3. Test cluster health using Helm test.
   $ helm --namespace=elk test elasticsearch
+
+  Kibana: https://kibana.harishshetty.xyz (no login)
+
+
+  helm uninstall filebeat -n elk
+  helm uninstall logstash -n elk
+  helm uninstall kibana -n elk
+  helm uninstall elasticsearch -n elk
+  helm uninstall stable -n prometheus
+
+
+  helm repo add kyverno https://kyverno.github.io/kyverno/
+  helm repo update
+  helm search repo kyverno
+
+  helm install kyverno kyverno/kyverno -n kyverno --create-namespace
+
+
+# High Availability Installation
+Use Helm to create a Namespace and install Kyverno in a highly-available configuration.
+
+#Terminal window
+
+helm install kyverno kyverno/kyverno -n kyverno --create-namespace \
+--set admissionController.replicas=3 \
+--set backgroundController.replicas=2 \
+--set cleanupController.replicas=2 \
+--set reportsController.replicas=2

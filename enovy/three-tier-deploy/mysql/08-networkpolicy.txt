@@ -17,3 +17,5 @@ spec:
       ports:
         - protocol: TCP
           port: 3306
+
+nc -zv mysql-write 3306

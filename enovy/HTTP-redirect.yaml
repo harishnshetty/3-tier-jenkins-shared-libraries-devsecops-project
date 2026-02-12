@@ -16,6 +16,7 @@ spec:
     - "grafana.harishshetty.xyz"
     - "prometheus.harishshetty.xyz"
     - "kibana.harishshetty.xyz"
+    - "3tier.harishshetty.xyz"
     - "*.harishshetty.xyz"
   rules:
     - filters:

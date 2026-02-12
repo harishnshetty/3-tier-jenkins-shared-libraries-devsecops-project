@@ -6,15 +6,22 @@ spec:
   acme:
     email: harishn662@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
+
     privateKeySecretRef:
       name: letsencrypt-prod
+
     solvers:
       - selector:
           dnsZones:
             - harishshetty.xyz
+
         dns01:
           route53:
             region: ap-south-1
-            # The cert-manager service account will use IRSA for authentication
-            # Ensure the cert-manager ServiceAccount has the annotation:
-            # eks.amazonaws.com/role-arn: <cert-manager-iam-role-arn>
+            hostedZoneID:
+              Z01520502A2MF5VJ6GFZ6 #aws route53 list-hosted-zones
+
+
+              # The cert-manager service account will use IRSA for authentication
+              # Ensure the cert-manager ServiceAccount has the annotation:
+              # eks.amazonaws.com/role-arn: <cert-manager-iam-role-arn>

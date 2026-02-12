@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd
+  namespace: db
+spec:
+  selector:
+    matchLabels:
+      app: httpd
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: httpd
+    spec:
+      containers:
+        - image: harishnshetty/iphone:latest
+          name: httpd
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd-svc
+  namespace: db
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: httpd
+# ---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: HTTPRoute
+# metadata:
+#   name: httpd-route
+# spec:
+#   parentRefs:
+#     - name: external-gateway
+#       namespace: gateway
+#       sectionName: https
+#   hostnames:
+#     - laptop.harishshetty.xyz
+#   rules:
+#     - backendRefs:
+#         - kind: Service
+#           name: httpd-svc
+#           port: 80
+# ---
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: ReferenceGrant
+# metadata:
+#   name: laptop-access
+#   namespace: default
+# spec:
+#   from:
+#     - group: gateway.networking.k8s.io
+#       kind: HTTPRoute
+#       namespace: gateway
+#   to:
+#     - group: ""
+#       kind: Service

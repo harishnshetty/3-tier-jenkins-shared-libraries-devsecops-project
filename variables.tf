@@ -35,11 +35,6 @@ variable "min_size" {
   type = number
 }
 
-variable "instance_types" {
-  type = list(string)
-}
-
-
 
 variable "is_alb_controller_enabled" {
   type    = bool
@@ -56,4 +51,9 @@ variable "addons" {
     name    = string
     version = optional(string)
   }))
+}
+
+
+variable "spot_instance_types" {
+  type = list(string)
 }
