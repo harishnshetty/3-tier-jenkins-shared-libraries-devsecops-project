@@ -1,0 +1,36 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: check-vulnerabilities
+  namespace: db
+spec:
+  validationFailureAction: Enforce
+  webhookTimeoutSeconds: 30
+  failurePolicy: Fail
+  rules:
+    - name: not-older-than-1-week
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      verifyImages:
+        - imageReferences:
+            - "*"
+          attestors:
+            - count: 1
+              entries:
+                - keys:
+                    publicKeys: |-
+                      -----BEGIN PUBLIC KEY-----
+                      MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEf50MuPUwcDwDLIQnBHQDOffHHGwu
+                      gqnVRgXmObiTtmjl4QnMJFuuG9rtsQRlsvTLs7O8Zqm7gdcTpqKO4br8hg==
+                      -----END PUBLIC KEY-----
+
+          # attestations:
+          #   - type: https://cosign.sigstore.dev/attestation/vuln/v1
+          #     conditions:
+          #       - all:
+          #           - key: "{{ time_since('','{{ predicate.metadata.scanFinishedOn }}', '') }}"
+          #             operator: LessThanOrEquals
+          #             value: "168h"

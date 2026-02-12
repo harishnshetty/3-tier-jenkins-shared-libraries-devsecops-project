@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: db
+data:
+  primary.cnf: |
+    [mysqld]
+    server-id=1
+    log-bin=mysql-bin
+    binlog_format=ROW
+    gtid_mode=ON
+    enforce_gtid_consistency=ON
+    log_replica_updates=ON
+
+  replica.cnf: |
+    [mysqld]
+    read_only=ON
+    super_read_only=ON
+    relay-log=relay-bin
+    gtid_mode=ON
+    enforce_gtid_consistency=ON
+
+  init.sql: |
+    -- Create database if it doesn't exist
+    CREATE DATABASE IF NOT EXISTS webappdb;
+    USE webappdb;
+
+    -- Fix for ER_NOT_SUPPORTED_AUTH_MODE
+    ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+
+    -- Create table with unique constraint to avoid duplicates
+    CREATE TABLE IF NOT EXISTS transactions (
+        id INT NOT NULL AUTO_INCREMENT,
+        amount DECIMAL(10,2),
+        description VARCHAR(100),
+        PRIMARY KEY (id),
+        UNIQUE KEY unique_transaction (amount, description)
+    );
+
+    -- Insert data (duplicates will be ignored)
+    INSERT IGNORE INTO transactions (amount, description) VALUES
+    (500, 'bike'),
+    (400, 'groceries');
