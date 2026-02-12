@@ -33,8 +33,6 @@ pipeline{
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        CONTAINER_PORT = 80
-        EXPOSE_PORT = 80
         BRANCH = 'deployment'
         MANIFESTFILENAME = 'three-tier-app/09-backend.yaml'
         sonarServer = 'sonar-server'
