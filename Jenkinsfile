@@ -119,12 +119,6 @@ pipeline{
             }
         }
 
-        stage('Docker Run Container'){
-        when { expression { params.action == 'create'}}    
-            steps{
-                dockerRun()
-            }
-        }
 
         stage('SBOM and Cosign Attestation'){
             when { expression { params.action == 'create'}}    
