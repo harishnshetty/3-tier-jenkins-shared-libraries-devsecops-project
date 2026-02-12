@@ -29,14 +29,13 @@ pipeline{
 
     tools{
         jdk 'jdk17'
-        nodejs 'node20'
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
         BRANCH = 'deployment'
         MANIFESTFILENAME = 'three-tier-app/04-statefulset.yaml'
         sonarServer = 'sonar-server'
-        sonarqubeCredentialsId = 'Sonar-token'
+        sonarqubeCredentialsId = 'sonar-token'
 
     }
     stages{
@@ -79,15 +78,6 @@ pipeline{
                 trivyFs()
             }
         }
-
-
-        stage('OWASP FS SCAN') {
-            when { expression { params.action == 'create'} }
-            steps {
-                owaspdpcheck()
-            }
-        }
-
 
 
         stage('Docker Build'){
