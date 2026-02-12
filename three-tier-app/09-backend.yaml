@@ -19,7 +19,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: backend
-          image: harishnshetty/backend-signed:latest
+          image: harishnshetty/backend-signed:6
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
