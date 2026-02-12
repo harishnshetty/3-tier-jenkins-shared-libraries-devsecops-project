@@ -1,9 +1,11 @@
-FROM mysql:9.6.0
+FROM mysql:8.0
 
 LABEL maintainer="DevSecOps"
+LABEL description="Custom MySQL image"
+LABEL version="1.0"
+RUN microdnf install -y iputils nmap-ncat bind-utils telnet curl
 
-COPY --chown=mysql:mysql appdb.sql /docker-entrypoint-initdb.d/
-
-HEALTHCHECK CMD mysqladmin ping -h localhost || exit 1
 USER mysql
+
 EXPOSE 3306
+
