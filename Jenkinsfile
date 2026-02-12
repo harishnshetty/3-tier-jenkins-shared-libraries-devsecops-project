@@ -38,7 +38,7 @@ pipeline{
         BRANCH = 'deployment'
         MANIFESTFILENAME = 'three-tier-app/09-backend.yaml'
         sonarServer = 'sonar-server'
-        sonarqubeCredentialsId = 'Sonar-token'
+        sonarqubeCredentialsId = 'sonar-token'
 
     }
     stages{
