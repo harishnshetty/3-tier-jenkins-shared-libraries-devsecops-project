@@ -70,7 +70,7 @@ pipeline {
             steps{
                 script{
                     dir('EKS'){
-                        sh 'terraform plan'
+                        sh 'terraform plan -var-file=${env.varfile}.tfvars'
                     }
                     input(message: "Are you sure to proceed?", ok: "Proceed")
                 }
