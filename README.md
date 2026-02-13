@@ -12,6 +12,12 @@ sh-5.1$ id
 uid=999(mysql) gid=999(mysql) groups=999(mysql) 
 ```
 
+
+
+
+
+** how to sign using cosign **
+```bash
 docker build -t harishnshetty/mysql-signed:1 .
 
 docker push harishnshetty/mysql-signed:1
@@ -34,3 +40,4 @@ cosign verify-attestation \
   --key cosign.pub \
   --type cyclonedx \
   docker.io/harishnshetty/mysql-signed@sha256:ff2ee817f9b36602b8ce491aeec24d02e482dcf3900c7572b3b5278c616d501b
+  ```
