@@ -19,7 +19,7 @@ spec:
         fsGroup: 101
       containers:
         - name: frontend
-          image: harishnshetty/frontend-signed:9
+          image: harishnshetty/frontend-signed:8
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
