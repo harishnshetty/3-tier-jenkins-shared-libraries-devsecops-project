@@ -40,6 +40,7 @@ pipeline {
             steps{
                 script{
                     dir('EKS'){
+                        sh 'ls'
                         sh 'terraform init'
                     }
                 }
