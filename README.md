@@ -223,7 +223,7 @@ docker run -d --name sonarqube \
 | git           | github-token  | username/password   | github token             |
 
 - repo
-- admin:repohook
+- admin:repo_hook
 - notification
 
 <!-- | aws-cred      | awscreds      | Username/app password |     secret-key/access-key   | -->
