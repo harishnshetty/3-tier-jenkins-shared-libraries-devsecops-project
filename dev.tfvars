@@ -5,9 +5,9 @@ cluster_version                 = "1.35"
 node_group_name                 = "ondemand-node-group" #spot-node-group
 cluster_endpoint_private_access = true
 cluster_endpoint_public_access  = true
-desired_size                    = 3
-min_size                        = 3
-max_size                        = 4
+desired_size                    = 4
+min_size                        = 4
+max_size                        = 6
 
 
 spot_instance_types = ["c5a.large", "c5a.xlarge", "m5a.large", "m5a.xlarge", "c5.large", "m5.large", "t3a.large", "t3a.xlarge", "t3a.medium"]
