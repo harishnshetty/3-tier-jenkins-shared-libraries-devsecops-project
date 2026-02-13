@@ -10,9 +10,9 @@
 [![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/cc0a165209bb710d2f3dffbd5a81b448c2abfd1c/sharedlibraries.jpg)](https://youtu.be/KwKtMHBQXk4)
 
 
-## Flipkart Clone Sample Image
+<!-- ## Flipkart Clone Sample Image
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/d13e0ad9f2fc91499853cc8624b3c2d50f8f2e88/flipkart2.jpg)](https://youtu.be/KwKtMHBQXk4)
+[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/d13e0ad9f2fc91499853cc8624b3c2d50f8f2e88/flipkart2.jpg)](https://youtu.be/KwKtMHBQXk4) -->
 
 ## 3Tier Jenkins shared library with GitOps and DevSecOps Pipeline
 
