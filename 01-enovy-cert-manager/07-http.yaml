@@ -95,9 +95,21 @@ spec:
             value: /
       backendRefs:
         - kind: Service
-          name: frontend-svc
+          name: frontend-svc-blue
           namespace: prod
           port: 80
+          weight: 50
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - kind: Service
+          name: frontend-svc-green
+          namespace: prod
+          port: 80
+          weight: 50
     # - matches:
     #     - path:
     #         type: PathPrefix

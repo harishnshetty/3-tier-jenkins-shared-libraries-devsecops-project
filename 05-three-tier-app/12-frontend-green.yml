@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-depo
+  name: frontend-depo-green
   namespace: prod
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: frontend
+      app: frontend-green
   template:
     metadata:
       labels:
-        app: frontend
+        app: frontend-green
     spec:
       securityContext:
         runAsUser: 101
         runAsGroup: 101
         fsGroup: 101
       containers:
-        - name: frontend
-          image: harishnshetty/frontend-signed:8
+        - name: frontend-green
+          image: harishnshetty/frontend-signed:green
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -58,11 +58,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-svc
+  name: frontend-svc-green
   namespace: prod
 spec:
   selector:
-    app: frontend
+    app: frontend-green
   ports:
     - protocol: TCP
       port: 80

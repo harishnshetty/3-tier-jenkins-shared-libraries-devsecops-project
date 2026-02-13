@@ -1,0 +1,39 @@
+apiVersion: kyverno.io/v1
+kind: Policy
+metadata:
+  name: restrict-image-registry
+  namespace: prod
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: validate-image-registry
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Image must be from docker.io/harishnshetty"
+        anyPattern:
+          - spec:
+              containers:
+                - image: "harishnshetty/frontend-signed:*"
+          - spec:
+              containers:
+                - image: "harishnshetty/backend-signed:*"
+          - spec:
+              containers:
+                - image: "harishnshetty/mysql-signed:*"
+          - spec:
+              containers:
+                - image: "docker.io/harishnshetty/frontend-signed:*"
+          - spec:
+              containers:
+                - image: "docker.io/harishnshetty/backend-signed:*"
+          - spec:
+              containers:
+                - image: "docker.io/harishnshetty/mysql-signed:*"
+          # - spec:
+          #     containers:
+          #       - image: "harishnshetty/laptop:latest"
