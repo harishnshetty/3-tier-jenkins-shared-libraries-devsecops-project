@@ -63,7 +63,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    sh 'terraform plan -var-file=${env.varfile}.tfvars'
+                    sh "terraform plan -var-file=${env.varfile}.tfvars"
                     input(message: "Are you sure to proceed?", ok: "Proceed")
                 }
             }
@@ -72,7 +72,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    sh 'terraform apply -var-file=${env.varfile}.tfvars --auto-approve'
+                    sh "terraform apply -var-file=${env.varfile}.tfvars --auto-approve"
                 }
             }
         }
@@ -80,7 +80,7 @@ pipeline {
             when { expression { params.action == 'delete'}} 
             steps{
                 script{
-                    sh 'terraform destroy -var-file=${env.varfile}.tfvars --auto-approve'
+                    sh "terraform destroy -var-file=${env.varfile}.tfvars --auto-approve"
                 }
             }
         }
