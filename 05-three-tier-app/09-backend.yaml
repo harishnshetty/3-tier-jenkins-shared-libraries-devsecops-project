@@ -4,7 +4,7 @@ metadata:
   name: backend-depo
   namespace: prod
 spec:
-  replicas: 3
+  replicas: 2
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -24,7 +24,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: backend
-          image: harishnshetty/backend-signed:6
+          image: harishnshetty/backend-signed:5
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
