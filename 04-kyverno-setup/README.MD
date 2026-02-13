@@ -10,7 +10,7 @@ helm install kyverno kyverno/kyverno -n kyverno --create-namespace
 ```
 
 ## High Availability Installation
-Use Helm to create a Namespace and install Kyverno in a highly-available configuration.
+### Use Helm to create a Namespace and install Kyverno in a highly-available configuration.
 
 ```bash
 helm install kyverno kyverno/kyverno -n kyverno --create-namespace \
