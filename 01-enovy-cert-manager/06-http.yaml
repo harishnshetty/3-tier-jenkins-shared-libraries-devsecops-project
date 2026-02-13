@@ -81,7 +81,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: 3tier-route
-  namespace: default
+  namespace: prod
 spec:
   parentRefs:
     - name: external-gateway
@@ -90,27 +90,38 @@ spec:
   hostnames:
     - 3tier.harishshetty.xyz
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - kind: Service
-          name: frontend-service
-          namespace: default
+          name: frontend-svc
+          namespace: prod
           port: 80
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: kibana-route
-  namespace: default
-spec:
-  parentRefs:
-    - name: external-gateway
-      namespace: gateway
-      sectionName: https
-  hostnames:
-    - kibana.harishshetty.xyz
-  rules:
-    - backendRefs:
-        - kind: Service
-          name: kibana-kibana
-          namespace: elk
-          port: 5601
+# ---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: HTTPRoute
+# metadata:
+#   name: 3tier-route
+#   namespace: prod
+# spec:
+#   parentRefs:
+#     - name: external-gateway
+#       namespace: gateway
+#       sectionName: https
+#   hostnames:
+#     - 3tier.harishshetty.xyz
+#   rules:
+#     - matches:
+#         - path:
+#             type: PathPrefix
+#             value: /health
+#         - path:
+#             type: PathPrefix
+#             value: /transaction
+#       backendRefs:
+#         - kind: Service
+#           name: backend-svc
+#           namespace: prod
+#           port: 4000

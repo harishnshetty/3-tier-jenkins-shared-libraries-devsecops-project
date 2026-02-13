@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frontend-configmap
-  namespace: db
+  namespace: prod
 data:
   default.conf: |
     log_format json_combined escape=json

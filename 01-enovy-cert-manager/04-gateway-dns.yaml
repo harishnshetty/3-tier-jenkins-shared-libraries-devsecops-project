@@ -30,25 +30,3 @@ spec:
           - kind: Secret
             name: harishshetty-tls
             namespace: gateway
-# spec:
-#   gatewayClassName: external-gatewayclass
-#   listeners:
-#     - name: http
-#       port: 80
-#       protocol: HTTP
-#       allowedRoutes:
-#         namespaces:
-#           from: All
-#     - name: https
-#       hostname: "*.harishshetty.xyz"
-#       port: 443
-#       protocol: HTTPS
-#       allowedRoutes:
-#         namespaces:
-#           from: All
-#       tls:
-#         certificateRefs:
-#           - kind: Secret
-#             group: ""
-#             name: "mygateway-cert"
-#             namespace: gateway
