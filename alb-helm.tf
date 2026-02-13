@@ -49,5 +49,5 @@ resource "helm_release" "aws-load-balancer-controller" {
     })
   ]
 
-  depends_on = [aws_eks_node_group.node_group]
+  # depends_on = [kubernetes_service_account.alb_controller_sa]
 }
