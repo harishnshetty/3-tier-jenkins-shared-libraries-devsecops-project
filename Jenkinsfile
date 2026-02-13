@@ -39,10 +39,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    dir('EKS'){
-                        sh 'ls'
-                        sh 'terraform init'
-                    }
+                    sh 'terraform init'
                 }
             }
         }
@@ -50,9 +47,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    dir('EKS'){
-                        sh 'terraform fmt'
-                    }
+                    sh 'terraform fmt'
                 }
             }
         }
@@ -60,9 +55,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    dir('EKS'){
-                        sh 'terraform validate'
-                    }
+                    sh 'terraform validate'
                 }
             }
         }
@@ -70,9 +63,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    dir('EKS'){
-                        sh 'terraform plan -var-file=${env.varfile}.tfvars'
-                    }
+                    sh 'terraform plan -var-file=${env.varfile}.tfvars'
                     input(message: "Are you sure to proceed?", ok: "Proceed")
                 }
             }
@@ -81,9 +72,7 @@ pipeline {
             when { expression { params.action == 'create'}} 
             steps{
                 script{
-                    dir('EKS') {
-                        sh 'terraform apply -var-file=${env.varfile}.tfvars --auto-approve'
-                    }
+                    sh 'terraform apply -var-file=${env.varfile}.tfvars --auto-approve'
                 }
             }
         }
@@ -91,9 +80,7 @@ pipeline {
             when { expression { params.action == 'delete'}} 
             steps{
                 script{
-                    dir('EKS') {
-                        sh 'terraform destroy -var-file=${env.varfile}.tfvars --auto-approve'
-                    }
+                    sh 'terraform destroy -var-file=${env.varfile}.tfvars --auto-approve'
                 }
             }
         }
