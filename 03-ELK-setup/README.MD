@@ -17,7 +17,7 @@ helm show values elastic/elasticsearch > elasticsearch-values.yaml
 ```
 ## 1.2 Install Elasticsearch (Version 8.5.1)
 ```bash
-helm install elasticsearch elastic/elasticsearch -f elasticsearch-values.yaml -n elk --create-namespace --version 8.5.1
+helm install elasticsearch elastic/elasticsearch -f 01-elasticsearch-values.yaml -n elk --create-namespace --version 8.5.1
 ```
 
 ## 1.3 Wait for pods to be ready
@@ -31,8 +31,10 @@ Retrieve the auto-generated password for the `elastic` user:
 NOTES:
 1. Watch all cluster members come up.
   $ kubectl get pods --namespace=elk -l app=elasticsearch-master -w
+
 2. Retrieve elastic user's password.
   $ kubectl get secrets --namespace=elk elasticsearch-master-credentials -ojsonpath='{.data.password}' | base64 -d
+  
 3. Test cluster health using Helm test.
   $ helm --namespace=elk test elasticsearch
 ```
