@@ -1,13 +1,13 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
 metadata:
-  name: allow-nginx-gateway-to-default
+  name: default-backend-access
   namespace: default
 spec:
   from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      namespace: nginx-gateway
+      namespace: default
   to:
     - group: ""
       kind: Service
@@ -15,13 +15,13 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
 metadata:
-  name: allow-nginx-gateway-to-argocd
+  name: argocd-backend-access
   namespace: argocd
 spec:
   from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      namespace: nginx-gateway
+      namespace: default
   to:
     - group: ""
       kind: Service
@@ -29,13 +29,13 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: ReferenceGrant
 metadata:
-  name: allow-nginx-gateway-to-monitoring
-  namespace: monitoring
+  name: prometheus-backend-access
+  namespace: prometheus
 spec:
   from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      namespace: nginx-gateway
+      namespace: default
   to:
     - group: ""
       kind: Service
