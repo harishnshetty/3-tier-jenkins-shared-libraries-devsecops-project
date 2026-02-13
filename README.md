@@ -1,10 +1,13 @@
-# 3tier Architecture with Jenkins Shared Library with GitOps and DevSecOps Pipeline , argocd, sonarqube, jenkins, docker, eks, terraform, k8s, spotinstance , elk stack, prometheus, grafana, node exporter, aws load balancer controller, 
+# 3tier App Architecture with Jenkins Shared Library DevSecOps Pipeline.
 
+- Frontend
+- Backend
+- Database
 
 ## For more projects, check out  
 [https://harishnshetty.github.io/projects.html](https://harishnshetty.github.io/projects.html)
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/d13e0ad9f2fc91499853cc8624b3c2d50f8f2e88/flipkart1.jpg)](https://youtu.be/KwKtMHBQXk4)
+[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/cc0a165209bb710d2f3dffbd5a81b448c2abfd1c/sharedlibraries.jpg)](https://youtu.be/KwKtMHBQXk4)
 
 
 ## Flipkart Clone Sample Image
@@ -212,12 +215,18 @@ docker run -d --name sonarqube \
 |---------------|---------------|---------------|-------------------------------------|
 | Email         | mail-cred     | Username/app password |                                  |
 | SonarQube     | sonar-token   | Secret text   | From SonarQube application         |
-| Docker Hub    | dockerhub-token   | Secret text   | From your Docker Hub profile       |
-| aws-cred      | awscreds      | Username/app password |     secret-key/access-key   |
+| Docker Hub    | dockerhub-token   | username/password  | From your Docker Hub profile       |
+
 | Slack         | slackcred   | Secret text   | From slack marketplace                |
 | cosign        | COSIGN_KEY_FILE  | Secretfile   | cosign.key             |
 | cosign        | COSIGN_PASSWORD  | Secret text   | cosign.key password             |
-| git           | github-token  | Secret text   | github token             |
+| git           | github-token  | username/password   | github token             |
+
+- repo
+- admin:repohook
+- notification
+
+<!-- | aws-cred      | awscreds      | Username/app password |     secret-key/access-key   | -->
 ```bash
 cosign generate-key-pair
 ```
