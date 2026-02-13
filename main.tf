@@ -46,34 +46,63 @@ resource "aws_security_group" "cheap-worker-sg" {
 
 
 # Request a spot instance at $0.03
-resource "aws_spot_instance_request" "cheap_worker" {
-  ami = "ami-019715e0d74f695be"
-  #   spot_price             = "0.02"
+# resource "aws_spot_instance_request" "cheap_worker" {
+#   ami = "ami-019715e0d74f695be"
+#   #   spot_price             = "0.02"
 
-  instance_type = "c5a.xlarge"
+#   instance_type = "c5a.xlarge"
 
-  root_block_device {
-    volume_size = 25
-    volume_type = "gp3"
+#   root_block_device {
+#     volume_size = 25
+#     volume_type = "gp3"
+#   }
+#   key_name = "new-keypair"
+
+#   vpc_security_group_ids = [aws_security_group.cheap-worker-sg.id]
+#   user_data              = file("script.sh")
+#   tags = {
+#     Name = "Spot-Worker"
+#   }
+
+#   wait_for_fulfillment = true
+#   depends_on           = [aws_security_group.cheap-worker-sg]
+
+#   lifecycle {
+#     ignore_changes = [ami, spot_price, vpc_security_group_ids]
+#   }
+# }
+
+# resource "aws_ec2_tag" "cheap_worker_tag" {
+#   resource_id = aws_spot_instance_request.cheap_worker.spot_instance_id
+#   key         = "Name"
+#   value       = "Spot-Worker"
+# }
+
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
   }
-  key_name = "new-keypair"
 
-  vpc_security_group_ids = [aws_security_group.cheap-worker-sg.id]
-  user_data              = file("script.sh")
-  tags = {
-    Name = "Spot-Worker"
-  }
-
-  wait_for_fulfillment = true
-  depends_on           = [aws_security_group.cheap-worker-sg]
-
-  lifecycle {
-    ignore_changes = [ami, spot_price, vpc_security_group_ids]
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
 }
 
-resource "aws_ec2_tag" "cheap_worker_tag" {
-  resource_id = aws_spot_instance_request.cheap_worker.spot_instance_id
-  key         = "Name"
-  value       = "Spot-Worker"
+resource "aws_instance" "bastion" {
+  #   ami                    = ami-019715e0d74f695be
+
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "c5a.xlarge"
+  vpc_security_group_ids = [aws_security_group.cheap-worker-sg.id]
+  key_name               = "new-keypair"
+  user_data              = file("script.sh")
+  tags = {
+    Name = "jenkins-server"
+  }
 }

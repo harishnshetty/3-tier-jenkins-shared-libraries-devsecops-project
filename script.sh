@@ -238,4 +238,4 @@ sudo chmod +x /usr/local/bin/cosign
 ############################################
 
 
-echo "kubectl, eksctl, trivy, cosign, docker, jenkins, terraform, helm, installed successfully"
+echo "gitleaks, kubectl, eksctl, trivy, cosign, docker, jenkins, terraform, helm, installed successfully"
