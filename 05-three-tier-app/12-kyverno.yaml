@@ -14,6 +14,7 @@ spec:
           - resources:
               kinds:
                 - Pod
+                - Deployment
       verifyImages:
         - imageReferences:
             - "*"
@@ -23,14 +24,14 @@ spec:
                 - keys:
                     publicKeys: |-
                       -----BEGIN PUBLIC KEY-----
-                      MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEf50MuPUwcDwDLIQnBHQDOffHHGwu
-                      gqnVRgXmObiTtmjl4QnMJFuuG9rtsQRlsvTLs7O8Zqm7gdcTpqKO4br8hg==
+                      MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2waGwj98vsapDzDi/6PoBHnyY0EC
+                      TjzxYJsoB17qti0QPHUzVhShvRPZxF5sOFzS3voQLtfyYvCxJT3dTwWiUg==
                       -----END PUBLIC KEY-----
 
-          # attestations:
-          #   - type: https://cosign.sigstore.dev/attestation/vuln/v1
-          #     conditions:
-          #       - all:
-          #           - key: "{{ time_since('','{{ predicate.metadata.scanFinishedOn }}', '') }}"
-          #             operator: LessThanOrEquals
-          #             value: "168h"
+          attestations:
+            - type: https://cosign.sigstore.dev/attestation/vuln/v1
+              conditions:
+                - all:
+                    - key: "{{ time_since('','{{ predicate.metadata.scanFinishedOn }}', '') }}"
+                      operator: LessThanOrEquals
+                      value: "168h"

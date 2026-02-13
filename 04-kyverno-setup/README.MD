@@ -19,3 +19,6 @@ helm install kyverno kyverno/kyverno -n kyverno --create-namespace \
 --set cleanupController.replicas=2 \
 --set reportsController.replicas=2
 ```
+```bash
+cosign verify --key cosign.pub harishnshetty/frontend-signed:8
+```
