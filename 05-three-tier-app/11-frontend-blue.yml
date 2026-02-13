@@ -5,6 +5,11 @@ metadata:
   namespace: prod
 spec:
   replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: frontend-blue
