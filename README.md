@@ -1,3 +1,29 @@
+# eks-terraform creation using jenkins pipeline
+
+
+## create the secret text in jenkins
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+
+
+## Create the following files:
+1. Jenkinsfile
+2. dev.tfvars
+3. prod.tfvars
+4. EKS directory with main.tf, variables.tf, outputs.tf, terraform.tfvars
+
+
+## 
+
+
+
+
+
+
+
+
+# Auto certificate manager installation using terraform
+```bash
 resource "helm_release" "cert_manager" {
   name             = "cert-manager"
   repository       = "https://charts.jetstack.io"
@@ -37,8 +63,11 @@ resource "helm_release" "cert_manager" {
     })
   ]
 }
+```
+```bash
+helm search repo jetstack/cert-manager
 
+helm repo add jetstack https://charts.jetstack.io ; helm repo update jetstack
 
-# helm search repo jetstack/cert-manager
-# helm repo add jetstack https://charts.jetstack.io ; helm repo update jetstack
-# helm install  cert-manager jetstack/cert-manager -n cert-manager  --create-namespace --version v1.16.2 -f cert-manager/values.yaml
+helm install  cert-manager jetstack/cert-manager -n cert-manager  --create-namespace --version v1.16.2 -f cert-manager/values.yaml
+```
