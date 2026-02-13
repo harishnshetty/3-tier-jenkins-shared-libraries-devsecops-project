@@ -5,7 +5,7 @@ metadata:
   namespace: prod
 spec:
   serviceName: mysql-headless
-  replicas: 3
+  replicas: 2
   podManagementPolicy: OrderedReady
   updateStrategy:
     type: RollingUpdate
