@@ -24,7 +24,7 @@ spec:
         fsGroup: 101
       containers:
         - name: frontend-green
-          image: harishnshetty/frontend-signed:green
+          image: harishnshetty/frontend-signed:green1
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
