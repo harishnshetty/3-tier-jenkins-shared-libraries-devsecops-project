@@ -1,7 +1,7 @@
 
 
-resource "aws_security_group" "cheap-worker-sg" {
-  name        = "cheap-worker-sg"
+resource "aws_security_group" "jenkins-worker-sg" {
+  name        = "jenkins-worker-sg"
   description = "Allow SSH and HTTP access"
 
   tags = {
@@ -14,19 +14,19 @@ resource "aws_security_group" "cheap-worker-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   from_port   = 8080
+  #   to_port     = 8080
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
-  ingress {
-    from_port   = 9000
-    to_port     = 9000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   from_port   = 9000
+  #   to_port     = 9000
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
 
   ingress {
@@ -46,7 +46,7 @@ resource "aws_security_group" "cheap-worker-sg" {
 
 
 # Request a spot instance at $0.03
-# resource "aws_spot_instance_request" "cheap_worker" {
+# resource "aws_spot_instance_request" "jenkins_worker" {
 #   ami = "ami-019715e0d74f695be"
 #   #   spot_price             = "0.02"
 
@@ -58,22 +58,22 @@ resource "aws_security_group" "cheap-worker-sg" {
 #   }
 #   key_name = "new-keypair"
 
-#   vpc_security_group_ids = [aws_security_group.cheap-worker-sg.id]
+#   vpc_security_group_ids = [aws_security_group.jenkins-worker-sg.id]
 #   user_data              = file("script.sh")
 #   tags = {
 #     Name = "Spot-Worker"
 #   }
 
 #   wait_for_fulfillment = true
-#   depends_on           = [aws_security_group.cheap-worker-sg]
+#   depends_on           = [aws_security_group.jenkins-worker-sg]
 
 #   lifecycle {
 #     ignore_changes = [ami, spot_price, vpc_security_group_ids]
 #   }
 # }
 
-# resource "aws_ec2_tag" "cheap_worker_tag" {
-#   resource_id = aws_spot_instance_request.cheap_worker.spot_instance_id
+# resource "aws_ec2_tag" "jenkins_worker_tag" {
+#   resource_id = aws_spot_instance_request.jenkins_worker.spot_instance_id
 #   key         = "Name"
 #   value       = "Spot-Worker"
 # }
@@ -99,10 +99,14 @@ resource "aws_instance" "bastion" {
 
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "c5a.xlarge"
-  vpc_security_group_ids = [aws_security_group.cheap-worker-sg.id]
+  vpc_security_group_ids = [aws_security_group.jenkins-worker-sg.id]
   key_name               = "new-keypair"
   user_data              = file("script.sh")
   tags = {
     Name = "jenkins-server"
+  }
+  root_block_device {
+    volume_size = 25
+    volume_type = "gp3"
   }
 }
