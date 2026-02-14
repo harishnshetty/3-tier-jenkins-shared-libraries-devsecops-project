@@ -216,7 +216,6 @@ docker run -d --name sonarqube \
 | Email         | mail-cred     | Username/app password |                                  |
 | SonarQube     | sonar-token   | Secret text   | From SonarQube application         |
 | Docker Hub    | dockerhub-token   | username/password  | From your Docker Hub profile       |
-
 | Slack         | slackcred   | Secret text   | From slack marketplace                |
 | cosign        | COSIGN_KEY_FILE  | Secretfile   | cosign.key             |
 | cosign        | COSIGN_PASSWORD  | Secret text   | cosign.key password             |
