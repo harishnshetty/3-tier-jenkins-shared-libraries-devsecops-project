@@ -23,7 +23,7 @@ pipeline{
         string(name: 'gitUserName', defaultValue: 'harishnshetty', description: 'Git User Name')
         string(name: 'gitPassword', defaultValue: 'github-token', description: 'Git Password')
 
-        string(name: 'slackChannel', defaultValue: '#devsecops', description: 'Slack Channel')
+        string(name: 'slackChannel', defaultValue: '#jenkins-shared-devsecops', description: 'Slack Channel')
         string(name: 'emailAddress', defaultValue: 'harishn662@gmail.com', description: 'Email Address')
     }
 
