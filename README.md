@@ -4,15 +4,18 @@
 - Backend
 - Database
 
+## Jenkins shared libraries repo: 
+[https://github.com/harishnshetty/jenkins-shared-libraries-project.git](https://github.com/harishnshetty/jenkins-shared-libraries-project.git)
+
+
+
 ## For more projects, check out  
 [https://harishnshetty.github.io/projects.html](https://harishnshetty.github.io/projects.html)
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/cc0a165209bb710d2f3dffbd5a81b448c2abfd1c/sharedlibraries.jpg)](https://youtu.be/KwKtMHBQXk4)
+[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/cc0a165209bb710d2f3dffbd5a81b448c2abfd1c/sharedlibraries.jpg)](https://youtu.be/NVqom2oZ40k)
 
 
-<!-- ## Flipkart Clone Sample Image
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/d13e0ad9f2fc91499853cc8624b3c2d50f8f2e88/flipkart2.jpg)](https://youtu.be/KwKtMHBQXk4) -->
 
 ## 3Tier Jenkins shared library with GitOps and DevSecOps Pipeline
 
@@ -618,7 +621,7 @@ Password: encrypted-password
 
 ## OWASP ZAPROXY
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/d13e0ad9f2fc91499853cc8624b3c2d50f8f2e88/flipkart3.jpg)](https://youtu.be/KwKtMHBQXk4)
+[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/d13e0ad9f2fc91499853cc8624b3c2d50f8f2e88/flipkart3.jpg)](https://youtu.be/NVqom2oZ40k)
 
 
 ##  Delete EKS Cluster (Cleanup) finally u done a project 
@@ -641,3 +644,4 @@ eksctl delete cluster --name my-cluster --region ap-south-1
 - Replace `<VERSION>`, `<your-server-ip>`, and other placeholders with specific values for your setup.
 - Prefer pinned versions for production environments rather than "latest".
 - Consult each project's official documentation for the most up-to
+
