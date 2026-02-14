@@ -210,27 +210,27 @@ sudo systemctl restart jenkins
 # Done
 ############################################
 
-############################################
-# Trivy installation 
-############################################
-sleep 5
-sudo apt-get install wget gnupg
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
-echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
-sudo apt-get update
-sudo apt-get install trivy
+# ############################################
+# # Trivy installation 
+# ############################################
+# sleep 5
+# sudo apt-get install wget gnupg
+# wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+# echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+# sudo apt-get update
+# sudo apt-get install trivy
 
-############################################
-# Done
-############################################
+# ############################################
+# # Done
+# ############################################
 
-############################################
-# Cosign installation 
-############################################
-sleep 5
-curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
-sudo mv cosign-linux-amd64 /usr/local/bin/cosign
-sudo chmod +x /usr/local/bin/cosign
+# ############################################
+# # Cosign installation 
+# ############################################
+# sleep 5
+# curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
+# sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+# sudo chmod +x /usr/local/bin/cosign
 
 
 ############################################
