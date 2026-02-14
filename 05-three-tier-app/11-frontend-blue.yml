@@ -25,6 +25,7 @@ spec:
       containers:
         - name: frontend-blue
           image: harishnshetty/frontend-signed:10
+          imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

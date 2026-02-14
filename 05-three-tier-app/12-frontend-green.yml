@@ -25,6 +25,7 @@ spec:
       containers:
         - name: frontend-green
           image: harishnshetty/frontend-signed:green2
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
