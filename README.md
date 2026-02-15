@@ -1,7 +1,7 @@
 # 3tier App Architecture with Jenkins Shared Library DevSecOps Pipeline.
 
 ## 3tier App Architecture Project Repo:
-[https://github.com/harishnshetty/3tier-app-architecture-project.git](https://github.com/harishnshetty/3tier-app-architecture-project.git)
+[https://github.com/harishnshetty/3-tier-jenkins-shared-libraries-devsecops-project.git](https://github.com/harishnshetty/3-tier-jenkins-shared-libraries-devsecops-project.git)
 
 ## For more projects, check out  
 [https://harishnshetty.github.io/projects.html](https://harishnshetty.github.io/projects.html)
