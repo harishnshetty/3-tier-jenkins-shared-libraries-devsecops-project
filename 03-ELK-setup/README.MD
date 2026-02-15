@@ -76,8 +76,8 @@ helm show values elastic/filebeat > filebeat-values.yaml
 ```
 ## 3.2 install the logstash and filebeat
 ```bash
-helm install logstash elastic/logstash -n elk -f logstash-values.yaml --version 8.5.1
-helm install filebeat elastic/filebeat -n elk -f filebeat-values.yaml --version 8.5.1
+helm install logstash elastic/logstash -n elk -f 03-logstash-values.yaml --version 8.5.1
+helm install filebeat elastic/filebeat -n elk -f 04-filebeat-values.yaml --version 8.5.1
 ```
 ## 3.3 uninstall the logstash and filebeat
 ```bash

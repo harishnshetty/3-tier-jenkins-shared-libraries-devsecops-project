@@ -34,6 +34,6 @@ spec:
           - spec:
               containers:
                 - image: "docker.io/harishnshetty/mysql-signed:*"
-          # - spec:
-          #     containers:
-          #       - image: "harishnshetty/laptop:latest"
+          - spec:
+              containers:
+                - image: "harishnshetty/laptop:latest"
