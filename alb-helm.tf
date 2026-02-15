@@ -3,6 +3,9 @@ resource "helm_release" "aws-load-balancer-controller" {
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   version    = "1.17.0"
+
+  # helm search repo eks/aws-load-balancer-controller --versions
+
   # timeout         = 2000
   namespace       = "kube-system"
   cleanup_on_fail = true
