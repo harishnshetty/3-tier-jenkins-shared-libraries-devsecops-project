@@ -105,15 +105,15 @@ spec:
         #   namespace: prod
         #   port: 80
         #   weight: 50
-    # - matches:
-    #     - path:
-    #         type: PathPrefix
-    #         value: /health
-    #     - path:
-    #         type: PathPrefix
-    #         value: /transaction
-    #   backendRefs:
-    #     - kind: Service
-    #       name: backend-svc
-    #       namespace: prod
-    #       port: 4000
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /health
+        - path:
+            type: PathPrefix
+            value: /transaction
+      backendRefs:
+        - kind: Service
+          name: backend-svc
+          namespace: prod
+          port: 4000
