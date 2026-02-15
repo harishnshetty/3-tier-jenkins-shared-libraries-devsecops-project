@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laptop
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app: laptop
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: laptop
+    spec:
+      containers:
+        - image: harishnshetty/laptop:latest
+          name: laptop
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: laptop-svc
+  namespace: dev
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: laptop
+# ---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: HTTPRoute
+# metadata:
+#   name: laptop-route
+#   namespace: dev
+# spec:
+#   parentRefs:
+#     - name: external-gateway
+#       namespace: gateway
+#       sectionName: https
+#   hostnames:
+#     - laptop.harishshetty.xyz
+#   rules:
+#     - backendRefs:
+#         - kind: Service
+#           name: laptop-svc
+#           port: 80
