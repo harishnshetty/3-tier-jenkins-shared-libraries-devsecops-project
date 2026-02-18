@@ -61,7 +61,7 @@ cosign verify-attestation --key cosign.pub --type vuln harishnshetty/cosign-demo
 ## For more projects, check out  
 [https://harishnshetty.github.io/projects.html](https://harishnshetty.github.io/projects.html)
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/cc0a165209bb710d2f3dffbd5a81b448c2abfd1c/sharedlibraries.jpg)](https://youtu.be/NVqom2oZ40k)
+[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/a1829efe7c6bfa5762b5db744e88250674b9c9bf/sharedlbrareiskubernetes-part2.jpg)](https://youtu.be/2j7xBL-nabg)
 
 
 <!-- ## Flipkart Clone Sample Image
