@@ -6,9 +6,8 @@
 ## For more projects, check out  
 [https://harishnshetty.github.io/projects.html](https://harishnshetty.github.io/projects.html)
 
-[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/a0404b23a7ccee770f4d780a45529d8d5d5e6894/sharedlbrareiskubernetes.jpg)](https://youtu.be/NVqom2oZ40k)
 
-
+[![Video Tutorial](https://github.com/harishnshetty/image-data-project/blob/a1829efe7c6bfa5762b5db744e88250674b9c9bf/sharedlbrareiskubernetes-part2.jpg)](https://youtu.be/2j7xBL-nabg)
 
 ## Jenkins shared libraries Main repo: 
 [https://github.com/harishnshetty/jenkins-shared-libraries-project.git](https://github.com/harishnshetty/jenkins-shared-libraries-project.git)
